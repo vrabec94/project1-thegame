@@ -37,15 +37,18 @@ class Player {
     });
   }
   moveUp() {
+    if (this.positionY < 100) {
     this.positionY+= 10;
     this.domElement.style.bottom = this.positionY + "vh";
     console.log('position y after moving up' + this.positionY);
-
+    }
   }
   moveDown() {
+    if (this.positionY > 0) {
     this.positionY--;
     this.domElement.style.bottom = this.positionY + "vh";
     console.log("position y after moving down" + this.positionY);
+    }
   }
     // initialise Player
 }
@@ -55,3 +58,9 @@ player.attachEventListeners();
 setInterval(() => {
     player.moveDown();
   }, 100);
+
+class Obstacle {
+    constructor() {
+
+    }
+}
