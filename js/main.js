@@ -1,21 +1,11 @@
-setInterval(() => {
-  player.moveDown();
-}, 100);
-
-this.bottomObstacleArr = [];
-this.topObstacleArr = [];
-
-setInterval(() => {
-  const bottomObstacles = new Obstacle(0, Math.random() * (60 - 10) + 10);
-  const topObstacles = new Obstacle(90, 10);
-  //console.log("position y" + bottomObstacles.positionY);
-  bottomObstacleArr.push(bottomObstacles);
-  topObstacleArr.push(topObstacles);
-}, 500);
-
-//Update obstacles
-setInterval(createObstacles, 50, bottomObstacleArr);
-setInterval(createObstacles, 50, topObstacleArr);
+/**  Class Player
+ *  - Creates a dom Element, the player on the left side of the box
+ *  - Player gets pulled down by gravity 0.1
+ *  - Gravity increases with time, the closer the player gets to the bottom
+ *  - attachEventListener to detect mouseclick on arrow up
+ *  - function moveUp, triggered by mouseclick on arrow up, changes its position
+ *  - function moveDown, implements gravity to player, changes its position
+ */
 
 class Player {
   constructor() {
@@ -32,20 +22,15 @@ class Player {
     this.createDomElement();
   }
 
-  // initialise Player
-  // create Dom Element Player
   createDomElement() {
-    // step1: create the element:
     this.domElement = document.createElement("div");
 
-    // step2: add content or modify (ex. innerHTML...)
     this.domElement.id = "player";
     this.domElement.style.width = this.width + "vw";
     this.domElement.style.height = this.height + "vh";
     this.domElement.style.bottom = this.positionY + "vh";
     this.domElement.style.left = this.positionX + "vw";
 
-    //step3: append to the dom: `parentElm.appendChild()`
     const boardElm = document.getElementById("game-environment");
     boardElm.appendChild(this.domElement);
   }
@@ -62,21 +47,8 @@ class Player {
     if (this.positionY < 100) {
       this.positionY += 5;
       this.domElement.style.bottom = this.positionY + "vh";
-      //console.log("position y after moving up" + this.positionY);
-    }
-  } /*
-  moveDown() {
-    if (this.positionY > 0) {
-      this.positionY--;
-      let gravity = this.gravitySpeed += this.gravity;
-      this.positionY -= gravity;
-      console.log("This is the gravity" + this.gravitySpeed);
-      //this.positionY += this.speedY + this.gravitySpeed;
-      this.domElement.style.bottom = this.positionY + "vh";
-      //console.log("position y after moving down" + this.positionY);
     }
   }
-  */
   moveDown() {
     if (this.positionY > 0) {
       this.gravitySpeed += this.gravity;
@@ -88,33 +60,14 @@ class Player {
   }
 }
 
-const player = new Player();
-player.attachEventListeners();
-//player.moveDown();
-
-function detectCollision(obstacleInstance) {
-  if (
-    player.positionX < obstacleInstance.positionX + obstacleInstance.width &&
-    player.positionX + player.width > obstacleInstance.positionX &&
-    player.positionY < obstacleInstance.positionY + obstacleInstance.height &&
-    player.height + player.positionY > obstacleInstance.positionY
-  ) {
-    console.log(obstacleInstance.width);
-    console.log("collision detected!!");
-    //location.href = 'gameover.html';
-  }
-}
-function removeObstacleIfOutside(obstacleInstance) {
-  if (obstacleInstance.positionX <= 0) {
-    obstacleInstance.domElement.remove(); //remove dom element
-    console.log("Removing elements..");
-    if (obstacleInstance.positionY === 0) {
-      bottomObstacleArr.shift();
-    } else if (obstacleInstance.positionY === 90) {
-      topObstacleArr.shift();
-    }
-  }
-}
+/** class Obstacle
+ *  - creates the Object Obstacle with parameters positionY
+ *   to differentiate between bottom and top obstacles
+ *  - parameter height to give the obstacles on the bottom
+ *   a random height
+ *  - function moveLeft moves the obstacles from right to left
+ *  and prevents obstacles from moving outside of the game area
+ */
 
 class Obstacle {
   constructor(positionY, height) {
@@ -127,17 +80,14 @@ class Obstacle {
     this.createDomElement();
   }
   createDomElement() {
-    // step1: create the element:
     this.domElement = document.createElement("div");
 
-    // step2: add content or modify (ex. innerHTML...)
     this.domElement.className = "obstacle";
     this.domElement.style.width = this.width + "vw";
     this.domElement.style.height = this.height + "vh";
     this.domElement.style.bottom = this.positionY + "vh";
     this.domElement.style.left = this.positionX + "vw";
 
-    //step3: append to the dom: `parentElm.appendChild()`
     const boardElm = document.getElementById("game-environment");
     boardElm.appendChild(this.domElement);
   }
@@ -145,20 +95,77 @@ class Obstacle {
     if (this.positionX > 0) {
       this.positionX--;
       this.domElement.style.left = this.positionX + "vw";
-      //console.log("position of obstacle" + this.positionX);
     }
   }
 }
-function createObstacles(obstacles) {
-  obstacles.forEach((obstacleInstance) => {
-    //move current obstacle
-    obstacleInstance.moveLeft();
 
-    //detect if there's a collision between player and current obstacle
-    detectCollision(obstacleInstance);
+/* Initialising player, starting game */
+const player = new Player();
+player.attachEventListeners();
 
-    //check if we need to remove current obstacle
-    removeObstacleIfOutside(obstacleInstance);
-    console.log("Length of array: " + obstacles.length);
+/* Make the Player fall down consistently */
+setInterval(() => {
+  player.moveDown();
+}, 100);
+
+/** Create obstacles
+ * - fill two arrays with obstacles with a delay of 0.5 seconds inbetween
+ *   to create obstacles consistently on top and bottom
+ * - bottom obstacles are created with a random height between 10 and 60
+ */
+
+this.bottomObstacleArr = [];
+this.topObstacleArr = [];
+
+setInterval(() => {
+  const bottomObstacles = new Obstacle(0, Math.random() * (60 - 10) + 10);
+  const topObstacles = new Obstacle(90, 10);
+  bottomObstacleArr.push(bottomObstacles);
+  topObstacleArr.push(topObstacles);
+}, 500);
+
+setInterval(handleObstacles, 50, bottomObstacleArr);
+setInterval(handleObstacles, 50, topObstacleArr);
+
+/** Detect Collision
+ *  between the player and the obstacles on the bottom and the top
+ *  redirects to a new page if collision is detected
+ */
+
+function detectCollision(oneObstacle) {
+  if (
+    player.positionX < oneObstacle.positionX + oneObstacle.width &&
+    player.positionX + player.width > oneObstacle.positionX &&
+    player.positionY < oneObstacle.positionY + oneObstacle.height &&
+    player.height + player.positionY > oneObstacle.positionY
+  ) {
+    location.href = "gameover.html";
+  }
+}
+/** Remove Obstacles
+ *  removes Obstacles from array and from the html document
+ *  if they move outside of the game area
+ */
+function removeObstacles(oneObstacle) {
+  if (oneObstacle.positionX <= 0) {
+    oneObstacle.domElement.remove();
+    if (oneObstacle.positionY === 0) {
+      bottomObstacleArr.shift();
+    } else if (oneObstacle.positionY === 90) {
+      topObstacleArr.shift();
+    }
+  }
+}
+/** handle Obstacles
+ *  iterates through the arrays of bottom and top
+ *  arrays
+ */
+function handleObstacles(obstacles) {
+  obstacles.forEach((oneObstacle) => {
+    oneObstacle.moveLeft();
+
+    detectCollision(oneObstacle);
+
+    removeObstacles(oneObstacle);
   });
 }

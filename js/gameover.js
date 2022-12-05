@@ -1,5 +1,10 @@
+/** implements logic for the gameover.html
+ *  - on mouseclick on button user will be redirected
+ *   to the game
+ * */
+
 const gameOverButton = document.getElementById('play-again');
 console.log(gameOverButton);
     gameOverButton.addEventListener("click", function() {
-        location.href = 'index.html';
+        location.href = 'letsplay.html';
     });
