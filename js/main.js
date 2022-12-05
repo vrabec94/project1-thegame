@@ -64,6 +64,7 @@ function detectCollision(obstacleInstance){
         player.positionY < obstacleInstance.positionY + obstacleInstance.height &&
         player.height + player.positionY > obstacleInstance.positionY
     ) {
+        console.log(obstacleInstance.width)
         console.log("collision detected!!");
         // location.href = 'gameover.html';
     }
@@ -72,16 +73,20 @@ function removeObstacleIfOutside(obstacleInstance){
     if (obstacleInstance.positionX <= 0) {
         obstacleInstance.domElement.remove(); //remove dom element
         console.log("Removing elements..");
-        obstacles.shift(); //remove from the array
+        if(obstacleInstance.positionY === 0) {
+            bottomObstacleArr.shift();
+        } else if (obstacleInstance.positionY === 100) {
+            topObstacleArr.shift();
+        }
     }
 }
 
 class Obstacle {
-  constructor() {
+  constructor(positionY) {
     this.width = 10;
     this.height = 10;
-    this.positionX = 80;
-    this.positionY = 0;
+    this.positionX = 100;
+    this.positionY = positionY;
 
     this.domElement = null;
     this.createDomElement();
@@ -109,13 +114,20 @@ class Obstacle {
     }
   }
 }
-this.obstacles = [];
+this.bottomObstacleArr = [];
+this.topObstacleArr = [];
 setInterval(() => {
-    const newObstacle = new Obstacle();
-    obstacles.push(newObstacle);
+    const bottomObstacles = new Obstacle(0);
+    const topObstacles = new Obstacle(90);
+    //console.log("position y" + bottomObstacles.positionY);
+    bottomObstacleArr.push(bottomObstacles);
+    topObstacleArr.push(topObstacles);
 }, 500);
 //Update obstacles
-setInterval(() => {
+setInterval(createObstacles, 50, bottomObstacleArr);
+setInterval(createObstacles, 50, topObstacleArr);
+function createObstacles(obstacles) {
+
     obstacles.forEach((obstacleInstance) => {
 
         //move current obstacle
@@ -128,4 +140,4 @@ setInterval(() => {
         removeObstacleIfOutside(obstacleInstance);
         console.log('Length of array: ' + obstacles.length);
     });
-}, 50);
+};
