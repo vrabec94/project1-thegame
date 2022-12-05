@@ -1,0 +1,14 @@
+body {
+    background-color: black;
+}
+
+#game-environment {
+    height: 100vh;
+    
+    background-color: rgb(238, 175, 232);
+    overflow: hidden;
+}
+#player {
+    position: absolute;
+    background-color: yellow;
+}
