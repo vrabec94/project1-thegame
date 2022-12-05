@@ -66,7 +66,7 @@ function detectCollision(obstacleInstance){
     ) {
         console.log(obstacleInstance.width)
         console.log("collision detected!!");
-        // location.href = 'gameover.html';
+        //location.href = 'gameover.html';
     }
 };
 function removeObstacleIfOutside(obstacleInstance){
@@ -75,7 +75,7 @@ function removeObstacleIfOutside(obstacleInstance){
         console.log("Removing elements..");
         if(obstacleInstance.positionY === 0) {
             bottomObstacleArr.shift();
-        } else if (obstacleInstance.positionY === 100) {
+        } else if (obstacleInstance.positionY === 90) {
             topObstacleArr.shift();
         }
     }
@@ -123,9 +123,11 @@ setInterval(() => {
     bottomObstacleArr.push(bottomObstacles);
     topObstacleArr.push(topObstacles);
 }, 500);
+
 //Update obstacles
 setInterval(createObstacles, 50, bottomObstacleArr);
 setInterval(createObstacles, 50, topObstacleArr);
+
 function createObstacles(obstacles) {
 
     obstacles.forEach((obstacleInstance) => {
