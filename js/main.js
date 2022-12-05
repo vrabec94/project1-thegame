@@ -38,14 +38,14 @@ class Player {
     if (this.positionY < 100) {
       this.positionY += 10;
       this.domElement.style.bottom = this.positionY + "vh";
-      console.log("position y after moving up" + this.positionY);
+      //console.log("position y after moving up" + this.positionY);
     }
   }
   moveDown() {
     if (this.positionY > 0) {
       this.positionY--;
       this.domElement.style.bottom = this.positionY + "vh";
-      console.log("position y after moving down" + this.positionY);
+      //console.log("position y after moving down" + this.positionY);
     }
   }
   // initialise Player
@@ -56,6 +56,18 @@ player.attachEventListeners();
 setInterval(() => {
   player.moveDown();
 }, 100);
+
+function detectCollision(obstacleInstance){
+    if (
+        player.positionX < obstacleInstance.positionX + obstacleInstance.width &&
+        player.positionX + player.width > obstacleInstance.positionX &&
+        player.positionY < obstacleInstance.positionY + obstacleInstance.height &&
+        player.height + player.positionY > obstacleInstance.positionY
+    ) {
+        console.log("collision detected!!");
+        // location.href = 'gameover.html';
+    }
+};
 
 class Obstacle {
   constructor() {
@@ -86,7 +98,7 @@ class Obstacle {
     if (this.positionX > 0) {
         this.positionX--;
         this.domElement.style.left = this.positionX + 'vw';
-        console.log("position of obstacle" + this.positionX);
+        //console.log("position of obstacle" + this.positionX);
     }
   }
 }
@@ -103,10 +115,21 @@ setInterval(() => {
         obstacleInstance.moveLeft();
 
         //detect if there's a collision between player and current obstacle
-        //this.detectCollision(obstacleInstance);
+        detectCollision(obstacleInstance);
+        /*
+        if (
+            player.positionX < obstacleInstance.positionX + obstacleInstance.width &&
+            player.positionX + player.width > obstacleInstance.positionX &&
+            player.positionY < obstacleInstance.positionY + obstacleInstance.height &&
+            player.height + player.positionY > obstacleInstance.positionY
+        ) {
+            console.log("collision detected!!");
+            // location.href = 'gameover.html';
+        }
+        */
 
         //check if we need to remove current obstacle
         //this.removeObstacleIfOutside(obstacleInstance);
         
     });
-}, 50)
+}, 50);
