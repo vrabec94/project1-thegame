@@ -68,6 +68,13 @@ function detectCollision(obstacleInstance){
         // location.href = 'gameover.html';
     }
 };
+function removeObstacleIfOutside(obstacleInstance){
+    if (obstacleInstance.positionX <= 0) {
+        obstacleInstance.domElement.remove(); //remove dom element
+        console.log("Removing elements..");
+        obstacles.shift(); //remove from the array
+    }
+}
 
 class Obstacle {
   constructor() {
@@ -116,20 +123,9 @@ setInterval(() => {
 
         //detect if there's a collision between player and current obstacle
         detectCollision(obstacleInstance);
-        /*
-        if (
-            player.positionX < obstacleInstance.positionX + obstacleInstance.width &&
-            player.positionX + player.width > obstacleInstance.positionX &&
-            player.positionY < obstacleInstance.positionY + obstacleInstance.height &&
-            player.height + player.positionY > obstacleInstance.positionY
-        ) {
-            console.log("collision detected!!");
-            // location.href = 'gameover.html';
-        }
-        */
 
         //check if we need to remove current obstacle
-        //this.removeObstacleIfOutside(obstacleInstance);
-        
+        removeObstacleIfOutside(obstacleInstance);
+        console.log('Length of array: ' + obstacles.length);
     });
 }, 50);
