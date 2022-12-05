@@ -9,7 +9,7 @@
 
 class Player {
   constructor() {
-    this.width = 20;
+    this.width = 25;
     this.height = 10;
     this.positionX = 0;
     this.positionY = 50 - this.width / 2;
@@ -55,7 +55,6 @@ class Player {
       this.positionX -= this.speedX;
       this.positionY -= this.speedY + this.gravitySpeed;
       this.domElement.style.bottom = this.positionY + "vh";
-      console.log(this.positionY);
     }
   }
 }

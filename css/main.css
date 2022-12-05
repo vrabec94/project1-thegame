@@ -4,13 +4,17 @@ body {
 
 #game-environment {
     height: 100vh;
-    
-    background-color: rgb(238, 175, 232);
+    background: url('../img/background-pixelated.png') no-repeat;
+    background-size: 100% 100%;
     overflow: hidden;
 }
 #player {
     position: absolute;
-    background-color: yellow;
+    border: 2px solid red;
+    background: url('../img/haku-chihiro-in-pixels.png') no-repeat;
+    padding: 40px 40px 40px 40px;
+    margin:  -40px  -40px  -40px  -40px;
+    background-size: 100% 100%;
 }
 .obstacle {
     position: absolute;
