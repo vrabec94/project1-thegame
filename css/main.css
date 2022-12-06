@@ -22,7 +22,7 @@ html, body {
 }
 #game-environment {
   position: relative;
-  height: 80%;
+  height: 60%;
   width: 80%;
   border: 2px solid red;
   background: url("../img/background-pixelated.png");
@@ -41,8 +41,6 @@ html, body {
 }
 .obstacle .top {
   background: url("../img/cloud-pixel.png") no-repeat;
-  padding: 30px 30px 30px 30px;
-  margin: -40px -40px -40px -40px;
   background-size: 100%;
 }
 .modal {
@@ -66,13 +64,10 @@ html, body {
 .landscape-obstacle {
   background: url("../img/floating-island.png") no-repeat;
   background-size: 100%;
-  padding: 10px 10px 10px 10px;
-  margin: -10px -10px -10px -10px;
 }
 .house-obstacle {
+  position: relative;
   background: url("../img/pixel-temple.png") no-repeat;
-  padding: 20px 20px 20px 20px;
-  margin: -20px -20px -20px -20px;
   background-size: 100% 100%;
 }
 .enemy {

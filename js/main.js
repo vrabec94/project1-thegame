@@ -9,13 +9,13 @@
 
 class Player {
   constructor() {
-    this.width = 15;
+    this.width = 20;
     this.height = 15;
-    this.positionX = 0;
+    this.positionX = 5;
     this.positionY = 0;
     this.speedX = 0;
     this.speedY = 0;
-    this.gravity = 0.1;
+    this.gravity = 0.15;
     this.gravitySpeed = 0;
 
     this.domElement = null;
@@ -46,7 +46,7 @@ class Player {
     this.gravitySpeed = 0;
     if (this.positionY < 100) {
       this.positionY += 5;
-      this.domElement.style.bottom = this.positionY + "vh";
+      this.domElement.style.bottom = this.positionY + "%";
     }
   }
   moveDown() {
@@ -54,7 +54,7 @@ class Player {
       this.gravitySpeed += this.gravity;
       this.positionX -= this.speedX;
       this.positionY -= this.speedY + this.gravitySpeed;
-      this.domElement.style.bottom = this.positionY + "vh";
+      this.domElement.style.bottom = this.positionY + "%";
     }
   }
 }
@@ -70,7 +70,7 @@ class Player {
 
 class Obstacle {
   constructor(positionY, height) {
-    this.width = 8;
+    this.width = 5;
     this.height = height;
     this.positionX = 100;
     this.positionY = positionY;
@@ -82,10 +82,10 @@ class Obstacle {
     this.domElement = document.createElement("div");
 
     this.domElement.className = "obstacle";
-    this.domElement.style.width = this.width + "vw";
-    this.domElement.style.height = this.height + "vh";
-    this.domElement.style.bottom = this.positionY + "vh";
-    this.domElement.style.left = this.positionX + "vw";
+    this.domElement.style.width = this.width + "%";
+    this.domElement.style.height = this.height + "%";
+    this.domElement.style.bottom = this.positionY + "%";
+    this.domElement.style.left = this.positionX + "%";
 
     if (this.domElement.positionY !== 0) {
       this.domElement.style.background =
@@ -111,30 +111,22 @@ class lowerObstacle extends Obstacle {
     this.positionX = this.positionX;
 
     this.domElement = null;
+    this.oneEnemy = null;
     this.firstDivInObst = null;
     this.secondDivInObst = null;
     this.createLowerDomElement();
   }
   createLowerDomElement() {
-    console.log(
-      "width " +
-        this.width +
-        "positionX " +
-        this.positionX +
-        "positionY " +
-        this.positionY +
-        this.height
-    );
     this.domElement = document.createElement("div");
     this.firstDivInObst = document.createElement("div");
     this.secondDivInObst = document.createElement("div");
 
     this.domElement.className = "obstacle";
-    this.domElement.style.width = this.width + "vw";
-    this.domElement.style.height = this.height + "vh";
+    this.domElement.style.width = this.width + "%";
+    this.domElement.style.height = this.height + "%";
 
-    this.domElement.style.bottom = this.positionY + "vh";
-    this.domElement.style.left = this.positionX + "vw";
+    this.domElement.style.bottom = this.positionY + "%";
+    this.domElement.style.left = this.positionX + "%";
 
     this.secondDivInObst.className = "house-obstacle";
     this.secondDivInObst.style.height = "10vh";
@@ -149,6 +141,14 @@ class lowerObstacle extends Obstacle {
 
     this.domElement.appendChild(this.secondDivInObst);
     this.domElement.appendChild(this.firstDivInObst);
+
+    const ememyIsOnHouse = (Math.random() < 0.3);
+
+    if (ememyIsOnHouse) {
+      this.oneEnemy = new Enemy();
+      this.secondDivInObst.appendChild(this.oneEnemy.domElement);
+
+    }
   }
 }
 
@@ -175,10 +175,10 @@ setInterval(() => {
   const topObstacles = new Obstacle(90, 10);
   bottomObstacleArr.push(bottomObstacles);
   topObstacleArr.push(topObstacles);
-}, 500);
+}, 3000);
 
-setInterval(handleObstacles, 50, bottomObstacleArr);
-setInterval(handleObstacles, 50, topObstacleArr);
+setInterval(handleObstacles, 300, bottomObstacleArr);
+setInterval(handleObstacles, 300, topObstacleArr);
 
 /** Detect Collision
  *  between the player and the obstacles on the bottom and the top
@@ -193,6 +193,12 @@ function detectCollision(oneObstacle) {
     player.height + player.positionY > oneObstacle.positionY
   ) {
     //location.href = "gameover.html";
+  }
+
+  if (oneObstacle.oneEnemy !== null && oneObstacle.oneEnemy !== undefined) {
+    if (oneObstacle.positionX < 40) {
+      oneObstacle.oneEnemy.moveUp();
+    }
   }
 }
 /** Remove Obstacles
@@ -222,15 +228,19 @@ function handleObstacles(obstacles) {
     removeObstacles(oneObstacle);
   });
 }
+
+
+
 class Enemy {
   constructor() {
-    this.width = 10;
-    this.height = 10;
-    this.positionX = Math.random() * (80 - 50) + 50;
+    this.width = 20;
+    this.height = 20;
+    this.positionX = 0;
     this.positionY = 0;
 
     this.domElement = null;
     this.createDomElement();
+    this.closeToEnemy = null;
   }
   createDomElement() {
 
@@ -238,30 +248,18 @@ class Enemy {
 
   
     this.domElement.className = "enemy";
-    this.domElement.style.width = this.width + "vw";
-    this.domElement.style.height = this.height + "vh";
-    this.domElement.style.bottom = this.positionY + "vh";
-    this.domElement.style.left = this.positionX + "vw";
-   
-    
+    this.domElement.style.width = this.width + "%";
+    this.domElement.style.height = this.height + "%";
+    this.domElement.style.bottom = this.positionY + "%";
+    this.domElement.style.left = this.positionX + "%";
+
   }
   moveUp() {
     this.positionY++;
     this.domElement.style.bottom = this.positionY + "vh";
   }
-  /*
-  divideEnemies() {
-    const boardElm = document.getElementsByClassName("house-obstacle");
-    const houses = [...boardElm];
-    console.log(houses);
-    console.log(this.domElement);
-    for (let i = 0; i < houses.length; i++) {
-      houses[i].appendChild(this.domElement);
-      console.log(houses[i]);
-    }
-  }
-  */
 }
+/*
 function handleEnemies(enemies) {
   enemies.forEach((oneEnemy) => {
     oneEnemy.divideEnemies()
