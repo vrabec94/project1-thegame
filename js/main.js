@@ -97,7 +97,7 @@ class Obstacle {
     boardElm.appendChild(this.domElement);
   }
   moveLeft() {
-    if (this.positionX > 0) {
+    if (this.positionX + this.width > 0) {
       this.positionX--;
       this.domElement.style.left = this.positionX + "vw";
     }
@@ -142,12 +142,11 @@ class lowerObstacle extends Obstacle {
     this.domElement.appendChild(this.secondDivInObst);
     this.domElement.appendChild(this.firstDivInObst);
 
-    const ememyIsOnHouse = (Math.random() < 0.3);
+    const ememyIsOnHouse = Math.random() < 0.3;
 
     if (ememyIsOnHouse) {
       this.oneEnemy = new Enemy();
       this.secondDivInObst.appendChild(this.oneEnemy.domElement);
-
     }
   }
 }
@@ -194,10 +193,9 @@ function detectCollision(oneObstacle) {
   ) {
     //location.href = "gameover.html";
   }
-
   if (oneObstacle.oneEnemy !== null && oneObstacle.oneEnemy !== undefined) {
     if (oneObstacle.positionX < 40) {
-      oneObstacle.oneEnemy.moveUp();
+      handleEnemies(oneObstacle, oneObstacle.oneEnemy);
     }
   }
 }
@@ -206,10 +204,11 @@ function detectCollision(oneObstacle) {
  *  if they move outside of the game area
  */
 function removeObstacles(oneObstacle) {
-  if (oneObstacle.positionX <= 0) {
+  if (oneObstacle.positionX + oneObstacle.width <= 0) {
     oneObstacle.domElement.remove();
     if (oneObstacle.positionY === 0) {
       bottomObstacleArr.shift();
+      console.log("removed.. array length is now" + bottomObstacleArr.length);
     } else if (oneObstacle.positionY === 90) {
       topObstacleArr.shift();
     }
@@ -229,8 +228,6 @@ function handleObstacles(obstacles) {
   });
 }
 
-
-
 class Enemy {
   constructor() {
     this.width = 20;
@@ -243,41 +240,30 @@ class Enemy {
     this.closeToEnemy = null;
   }
   createDomElement() {
-
     this.domElement = document.createElement("div");
 
-  
     this.domElement.className = "enemy";
     this.domElement.style.width = this.width + "%";
     this.domElement.style.height = this.height + "%";
     this.domElement.style.bottom = this.positionY + "%";
     this.domElement.style.left = this.positionX + "%";
-
   }
   moveUp() {
-    this.positionY++;
-    this.domElement.style.bottom = this.positionY + "vh";
+    this.positionY += 10;
+    this.domElement.style.bottom = this.positionY + "%";
   }
 }
-/*
-function handleEnemies(enemies) {
-  enemies.forEach((oneEnemy) => {
-    oneEnemy.divideEnemies()
-    oneEnemy.moveUp();
-
-    detectCollision(oneEnemy);
-
-    removeObstacles(oneEnemy);
-  });
+function handleEnemies(obstacleOfEnemy, enemy) {
+  enemy.moveUp();
+  detectEnemyCollision(obstacleOfEnemy, enemy);
 }
-
-/*
-const arrFullOfEnemies = [];
-
-setInterval(() => {
-  const oneEnemy = new Enemy();
-  arrFullOfEnemies.push(oneEnemy);
-}, 500);
-
-setInterval(handleEnemies, 50, arrFullOfEnemies);
-*/
+function detectEnemyCollision(obstacleOfEnemy, enemy) {
+  if (
+    player.positionX < obstacleOfEnemy.positionX + enemy.width &&
+    player.positionX + player.width > obstacleOfEnemy.positionX &&
+    player.positionY < enemy.positionY + enemy.height &&
+    player.height + player.positionY > enemy.positionY
+  ) {
+    console.log("COLLISION DETECTED");
+  }
+}
