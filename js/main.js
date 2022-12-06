@@ -70,7 +70,7 @@ class Player {
 
 class Obstacle {
   constructor(positionY, height) {
-    this.width = 10;
+    this.width = 8;
     this.height = height;
     this.positionX = 100;
     this.positionY = positionY;
@@ -87,6 +87,11 @@ class Obstacle {
     this.domElement.style.bottom = this.positionY + "vh";
     this.domElement.style.left = this.positionX + "vw";
 
+    if (this.domElement.positionY !== 0) {
+      this.domElement.style.background = 'url("../img/cloud-pixel.png") no-repeat';
+      this.domElement.style.backgroundSize = '100% 100%'
+    }
+
     const boardElm = document.getElementById("game-environment");
     boardElm.appendChild(this.domElement);
   }
@@ -95,6 +100,46 @@ class Obstacle {
       this.positionX--;
       this.domElement.style.left = this.positionX + "vw";
     }
+  }
+}
+class lowerObstacle extends Obstacle {
+  constructor(positionY, height, width, positionX) {
+    super(width, positionX);
+    this.positionY = positionY;
+    this.height = height;
+    this.positionX = this.positionX;
+
+    this.domElement = null;
+    this.firstDivInObst = null;
+    this.secondDivInObst = null;
+    this.createLowerDomElement();
+  }
+  createLowerDomElement() {
+    console.log("width " + this.width + "positionX " + this.positionX + "positionY " + this.positionY + this.height);
+    this.domElement = document.createElement("div");
+    this.firstDivInObst = document.createElement("div");
+    this.secondDivInObst = document.createElement("div");
+
+    this.domElement.className = "obstacle";
+    this.domElement.style.width = this.width + "vw";
+    this.domElement.style.height = this.height + "vh";
+    console.log("this is the height of obstacle low" + this.height);
+    this.domElement.style.bottom = this.positionY + "vh";
+    this.domElement.style.left = this.positionX + "vw";
+
+    this.secondDivInObst.className = "house-obstacle";
+    this.secondDivInObst.style.height = "10vh";
+
+    this.firstDivInObst.className = "landscape-obstacle";
+    this.firstDivInObst.style.top = "10vh";
+    this.firstDivInObst.style.bottom = "0";
+    this.firstDivInObst.style.height = "100%";
+
+    const boardElm = document.getElementById("game-environment");
+    boardElm.appendChild(this.domElement);
+
+    this.domElement.appendChild(this.secondDivInObst);
+    this.domElement.appendChild(this.firstDivInObst);
   }
 }
 
@@ -113,11 +158,11 @@ setInterval(() => {
  * - bottom obstacles are created with a random height between 10 and 60
  */
 
-this.bottomObstacleArr = [];
-this.topObstacleArr = [];
+const bottomObstacleArr = [];
+const topObstacleArr = [];
 
 setInterval(() => {
-  const bottomObstacles = new Obstacle(0, Math.random() * (60 - 10) + 10);
+  const bottomObstacles = new lowerObstacle(0, Math.random() * (60 - 10) + 10);
   const topObstacles = new Obstacle(90, 10);
   bottomObstacleArr.push(bottomObstacles);
   topObstacleArr.push(topObstacles);
@@ -138,7 +183,7 @@ function detectCollision(oneObstacle) {
     player.positionY < oneObstacle.positionY + oneObstacle.height &&
     player.height + player.positionY > oneObstacle.positionY
   ) {
-    location.href = "gameover.html";
+    //location.href = "gameover.html";
   }
 }
 /** Remove Obstacles
@@ -161,6 +206,7 @@ function removeObstacles(oneObstacle) {
  */
 function handleObstacles(obstacles) {
   obstacles.forEach((oneObstacle) => {
+
     oneObstacle.moveLeft();
 
     detectCollision(oneObstacle);
@@ -168,3 +214,4 @@ function handleObstacles(obstacles) {
     removeObstacles(oneObstacle);
   });
 }
+

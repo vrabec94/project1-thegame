@@ -1,40 +1,57 @@
 body {
-    background-color: black;
+  background-color: black;
 }
 
 #game-environment {
-    height: 100vh;
-    background: url('../img/background-pixelated.png') no-repeat;
-    background-size: 100% 100%;
-    overflow: hidden;
+  height: 100vh;
+  background: url("../img/background-temple-in-the-mountains.jpg") no-repeat;
+  background-size: 100% 100%;
+  overflow: hidden;
 }
 #player {
-    position: absolute;
-    border: 2px solid red;
-    background: url('../img/haku-chihiro-in-pixels.png') no-repeat;
-    padding: 40px 40px 40px 40px;
-    margin:  -40px  -40px  -40px  -40px;
-    background-size: 100% 100%;
+  position: absolute;
+  border: 2px solid red;
+  background: url("../img/haku-chihiro-in-pixels.png") no-repeat;
+  padding: 20px 20px 20px 20px;
+  margin: -40px -40px -40px -40px;
+  background-size: 100% 100%;
 }
 .obstacle {
-    position: absolute;
-    background-color: blueviolet;
+  position: absolute;
+}
+.obstacle .top {
+  background: url("../img/cloud-pixel.png") no-repeat;
+  padding: 30px 30px 30px 30px;
+  margin: -40px -40px -40px -40px;
+  background-size: 100%;
 }
 .modal {
-    position: absolute; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-  }
-  .modal-content {
-    background-color: #fefefe;
-    margin: 15% auto; /* 15% from the top and centered */
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%; /* Could be more or less, depending on screen size */
-  }
+  position: absolute; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+}
+.landscape-obstacle {
+  background: url("../img/floating-island.png") no-repeat;
+  background-size: 100%;
+  padding: 10px 10px 10px 10px;
+  margin: -10px -10px -10px -10px;
+}
+.house-obstacle {
+  background: url("../img/pixel-temple.png") no-repeat;
+  padding: 20px 20px 20px 20px;
+  margin: -20px -20px -20px -20px;
+  background-size: 100% 100%;
+}
