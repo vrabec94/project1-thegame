@@ -66,6 +66,7 @@ html, body {
   background-size: 100%;
 }
 .house-obstacle {
+  position: relative;
   border: 2px solid red;
   background: url("../img/pixel-temple.png") no-repeat;
   background-size: 100% 100%;

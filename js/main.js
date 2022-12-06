@@ -108,7 +108,7 @@ class lowerObstacle extends Obstacle {
     super(width, positionX);
     this.positionY = positionY;
     this.height = height;
-    this.positionX = this.positionX;
+    
 
     this.domElement = null;
     this.oneEnemy = null;
