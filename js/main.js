@@ -9,10 +9,10 @@
 
 class Player {
   constructor() {
-    this.width = 25;
-    this.height = 10;
+    this.width = 15;
+    this.height = 15;
     this.positionX = 0;
-    this.positionY = 50 - this.width / 2;
+    this.positionY = 0;
     this.speedX = 0;
     this.speedY = 0;
     this.gravity = 0.1;
@@ -26,10 +26,10 @@ class Player {
     this.domElement = document.createElement("div");
 
     this.domElement.id = "player";
-    this.domElement.style.width = this.width + "vw";
-    this.domElement.style.height = this.height + "vh";
-    this.domElement.style.bottom = this.positionY + "vh";
-    this.domElement.style.left = this.positionX + "vw";
+    this.domElement.style.width = this.width + "%";
+    this.domElement.style.height = this.height + "%";
+    this.domElement.style.bottom = this.positionY + "%";
+    this.domElement.style.left = this.positionX + "%";
 
     const boardElm = document.getElementById("game-environment");
     boardElm.appendChild(this.domElement);
@@ -88,8 +88,9 @@ class Obstacle {
     this.domElement.style.left = this.positionX + "vw";
 
     if (this.domElement.positionY !== 0) {
-      this.domElement.style.background = 'url("../img/cloud-pixel.png") no-repeat';
-      this.domElement.style.backgroundSize = '100% 100%'
+      this.domElement.style.background =
+        'url("../img/cloud-pixel.png") no-repeat';
+      this.domElement.style.backgroundSize = "100% 100%";
     }
 
     const boardElm = document.getElementById("game-environment");
@@ -115,7 +116,15 @@ class lowerObstacle extends Obstacle {
     this.createLowerDomElement();
   }
   createLowerDomElement() {
-    console.log("width " + this.width + "positionX " + this.positionX + "positionY " + this.positionY + this.height);
+    console.log(
+      "width " +
+        this.width +
+        "positionX " +
+        this.positionX +
+        "positionY " +
+        this.positionY +
+        this.height
+    );
     this.domElement = document.createElement("div");
     this.firstDivInObst = document.createElement("div");
     this.secondDivInObst = document.createElement("div");
@@ -123,7 +132,7 @@ class lowerObstacle extends Obstacle {
     this.domElement.className = "obstacle";
     this.domElement.style.width = this.width + "vw";
     this.domElement.style.height = this.height + "vh";
-    console.log("this is the height of obstacle low" + this.height);
+
     this.domElement.style.bottom = this.positionY + "vh";
     this.domElement.style.left = this.positionX + "vw";
 
@@ -206,7 +215,6 @@ function removeObstacles(oneObstacle) {
  */
 function handleObstacles(obstacles) {
   obstacles.forEach((oneObstacle) => {
-
     oneObstacle.moveLeft();
 
     detectCollision(oneObstacle);
@@ -214,4 +222,64 @@ function handleObstacles(obstacles) {
     removeObstacles(oneObstacle);
   });
 }
+class Enemy {
+  constructor() {
+    this.width = 10;
+    this.height = 10;
+    this.positionX = Math.random() * (80 - 50) + 50;
+    this.positionY = 0;
 
+    this.domElement = null;
+    this.createDomElement();
+  }
+  createDomElement() {
+
+    this.domElement = document.createElement("div");
+
+  
+    this.domElement.className = "enemy";
+    this.domElement.style.width = this.width + "vw";
+    this.domElement.style.height = this.height + "vh";
+    this.domElement.style.bottom = this.positionY + "vh";
+    this.domElement.style.left = this.positionX + "vw";
+   
+    
+  }
+  moveUp() {
+    this.positionY++;
+    this.domElement.style.bottom = this.positionY + "vh";
+  }
+  /*
+  divideEnemies() {
+    const boardElm = document.getElementsByClassName("house-obstacle");
+    const houses = [...boardElm];
+    console.log(houses);
+    console.log(this.domElement);
+    for (let i = 0; i < houses.length; i++) {
+      houses[i].appendChild(this.domElement);
+      console.log(houses[i]);
+    }
+  }
+  */
+}
+function handleEnemies(enemies) {
+  enemies.forEach((oneEnemy) => {
+    oneEnemy.divideEnemies()
+    oneEnemy.moveUp();
+
+    detectCollision(oneEnemy);
+
+    removeObstacles(oneEnemy);
+  });
+}
+
+/*
+const arrFullOfEnemies = [];
+
+setInterval(() => {
+  const oneEnemy = new Enemy();
+  arrFullOfEnemies.push(oneEnemy);
+}, 500);
+
+setInterval(handleEnemies, 50, arrFullOfEnemies);
+*/

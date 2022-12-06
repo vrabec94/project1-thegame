@@ -1,19 +1,39 @@
-body {
-  background-color: black;
+/* make sure the game-environment is centered horizontally and vertically */
+html, body {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
 }
-
+.centered-wrapper {
+  position: relative;
+  text-align: center;
+}
+.centered-wrapper:before {
+  content: "";
+  position: relative;
+  display: inline-block;
+  width: 0; height: 100%;
+  vertical-align: middle;
+}
+.centered-content {
+  display: inline-block;
+  vertical-align: middle;
+}
 #game-environment {
-  height: 100vh;
-  background: url("../img/background-temple-in-the-mountains.jpg") no-repeat;
-  background-size: 100% 100%;
+  position: relative;
+  height: 80%;
+  width: 80%;
+  border: 2px solid red;
+  background: url("../img/background-pixelated.png");
   overflow: hidden;
 }
 #player {
   position: absolute;
   border: 2px solid red;
   background: url("../img/haku-chihiro-in-pixels.png") no-repeat;
-  padding: 20px 20px 20px 20px;
-  margin: -40px -40px -40px -40px;
+  padding: 1%;
+  margin: -1%;
   background-size: 100% 100%;
 }
 .obstacle {
@@ -54,4 +74,8 @@ body {
   padding: 20px 20px 20px 20px;
   margin: -20px -20px -20px -20px;
   background-size: 100% 100%;
+}
+.enemy {
+  position: absolute;
+  border: 2px solid red;
 }
