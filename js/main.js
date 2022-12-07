@@ -26,10 +26,10 @@ class Player {
     this.domElement = document.createElement("div");
 
     this.domElement.id = "player";
-    this.domElement.style.width = this.width + "%";
-    this.domElement.style.height = this.height + "%";
-    this.domElement.style.bottom = this.positionY + "%";
-    this.domElement.style.left = this.positionX + "%";
+    this.domElement.style.width = this.width + "vw";
+    this.domElement.style.height = this.height + "vh";
+    this.domElement.style.bottom = this.positionY + "vh";
+    this.domElement.style.left = this.positionX + "vw";
 
     const boardElm = document.getElementById("game-environment");
     boardElm.appendChild(this.domElement);
@@ -46,7 +46,7 @@ class Player {
     this.gravitySpeed = 0;
     if (this.positionY < 100) {
       this.positionY += 5;
-      this.domElement.style.bottom = this.positionY + "%";
+      this.domElement.style.bottom = this.positionY + "vh";
     }
   }
   moveDown() {
@@ -54,7 +54,7 @@ class Player {
       this.gravitySpeed += this.gravity;
       this.positionX -= this.speedX;
       this.positionY -= this.speedY + this.gravitySpeed;
-      this.domElement.style.bottom = this.positionY + "%";
+      this.domElement.style.bottom = this.positionY + "vh";
     }
   }
 }
@@ -122,11 +122,11 @@ class lowerObstacle extends Obstacle {
     this.secondDivInObst = document.createElement("div");
 
     this.domElement.className = "obstacle";
-    this.domElement.style.width = this.width + "%";
-    this.domElement.style.height = this.height + "%";
+    this.domElement.style.width = this.width + "vw";
+    this.domElement.style.height = this.height + "vh";
 
-    this.domElement.style.bottom = this.positionY + "%";
-    this.domElement.style.left = this.positionX + "%";
+    this.domElement.style.bottom = this.positionY + "vh";
+    this.domElement.style.left = this.positionX + "vw";
 
     this.secondDivInObst.className = "house-obstacle";
     this.secondDivInObst.style.height = "10vh";
@@ -208,7 +208,7 @@ function removeObstacles(oneObstacle) {
     oneObstacle.domElement.remove();
     if (oneObstacle.positionY === 0) {
       bottomObstacleArr.shift();
-      console.log("removed.. array length is now" + bottomObstacleArr.length);
+      //console.log("removed.. array length is now" + bottomObstacleArr.length);
     } else if (oneObstacle.positionY === 90) {
       topObstacleArr.shift();
     }
@@ -249,8 +249,8 @@ class Enemy {
     this.domElement.style.left = this.positionX + "%";
   }
   moveUp() {
-    this.positionY += 10;
-    this.domElement.style.bottom = this.positionY + "%";
+    this.positionY += 1;
+    this.domElement.style.bottom = this.positionY + "vh";
   }
 }
 function handleEnemies(obstacleOfEnemy, enemy) {
@@ -258,12 +258,19 @@ function handleEnemies(obstacleOfEnemy, enemy) {
   detectEnemyCollision(obstacleOfEnemy, enemy);
 }
 function detectEnemyCollision(obstacleOfEnemy, enemy) {
-  if (
-    player.positionX < obstacleOfEnemy.positionX + enemy.width &&
-    player.positionX + player.width > obstacleOfEnemy.positionX &&
-    player.positionY < enemy.positionY + enemy.height &&
-    player.height + player.positionY > enemy.positionY
-  ) {
-    console.log("COLLISION DETECTED");
+  //console.log("playerX " + player.positionX + " player Y " + player.positionY);
+  //console.log("enemy X " + obstacleOfEnemy.positionX + " enemy Y " + enemy.positionY);
+  //enemy.positionY is always bigger than player.height + player.positionY
+  if (obstacleOfEnemy.positionX > 0) {
+    if (
+      player.positionX < obstacleOfEnemy.positionX + enemy.width &&
+      player.positionX + player.width > obstacleOfEnemy.positionX &&
+      player.positionY < enemy.positionY + enemy.height &&
+      player.height + player.positionY > enemy.positionY
+    ) {
+      //console.log("playerX " + player.positionX + " player Y " + player.positionY);
+      //console.log("enemy X " + obstacleOfEnemy.positionX + " enemy Y " + enemy.positionY);
+      console.log("COLLISION DETECTED");
+    }
   }
 }
