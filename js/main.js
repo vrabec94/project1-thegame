@@ -38,13 +38,11 @@ class Player {
     document.addEventListener("keydown", (event) => {
       if (event.key === "ArrowUp") {
         player.moveUp();
-        console.log("Key UP");
       }
     });
     document.addEventListener("keydown", (event2) => {
       if (event2.key === " ") {
         player.shoot();
-        console.log("SHOOT");
       }
     });
   }
@@ -81,7 +79,7 @@ class Player {
 
 class Obstacle {
   constructor(positionY, height) {
-    this.width = 5;
+    this.width = 8;
     this.height = height;
     this.positionX = 100;
     this.positionY = positionY;
@@ -153,7 +151,7 @@ class lowerObstacle extends Obstacle {
     this.domElement.appendChild(this.secondDivInObst);
     this.domElement.appendChild(this.firstDivInObst);
 
-    const ememyIsOnHouse = Math.random() < 0.9;
+    const ememyIsOnHouse = Math.random() < 0.3;
 
     if (ememyIsOnHouse) {
       this.oneEnemy = new Enemy(this.positionX, this.height);
@@ -190,14 +188,14 @@ const bottomObstacleArr = [];
 const topObstacleArr = [];
 
 setInterval(() => {
-  const bottomObstacles = new lowerObstacle(0, Math.random() * (50 - 10) + 10);
-  //const topObstacles = new Obstacle(90, 10);
+  const bottomObstacles = new lowerObstacle(0, Math.random() * (35 - 10) + 10);
+  const topObstacles = new Obstacle(90, 10);
   bottomObstacleArr.push(bottomObstacles);
-  //topObstacleArr.push(topObstacles);
-}, 9000);
+  topObstacleArr.push(topObstacles);
+}, 1000);
 
-setInterval(handleObstacles, 300, bottomObstacleArr);
-//setInterval(handleObstacles, 300, topObstacleArr);
+setInterval(handleObstacles, 100, bottomObstacleArr);
+setInterval(handleObstacles, 100, topObstacleArr);
 
 /** Detect Collision
  *  between the player and the obstacles on the bottom and the top
