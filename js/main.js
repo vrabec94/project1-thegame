@@ -9,8 +9,8 @@
 
 class Player {
   constructor() {
-    this.width = 10;
-    this.height = 5;
+    this.width = 16;
+    this.height = 6;
     this.positionX = 5;
     this.positionY = 0;
     this.speedX = 0;
@@ -252,7 +252,7 @@ function handleObstacles(obstacles) {
 class Enemy {
   constructor(positionX, positionY) {
     this.width = 3;
-    this.height = 10;
+    this.height = 12;
     this.positionX = positionX;
     this.positionY = positionY;
 
@@ -307,8 +307,8 @@ class Shooter {
   constructor() {
     this.positionX = player.positionX + player.width;
     this.positionY = player.positionY + player.height;
-    this.width = 2;
-    this.height = 3;
+    this.width = 3;
+    this.height = 10;
 
     this.shooter = null;
     this.createShooter();

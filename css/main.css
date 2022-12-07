@@ -34,7 +34,6 @@ body {
 }
 #player {
   position: absolute;
-  border: 2px solid red;
   background: url("../img/hakuandchihiro.png") no-repeat;
   padding: 1%;
   margin: -1%;
@@ -82,9 +81,9 @@ body {
   position: absolute;
   background: url('../img/enemy.png') no-repeat;
   background-size: 100% 100%;
-  border: 2px solid red;
 }
 .shooting-ball {
   position: absolute;
-  border: 2px solid red;
+  background: url('../img/shooter-boh.png') no-repeat;
+  background-size: 100% 100%;
 }
