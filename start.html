@@ -6,15 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Let's play!</title>
 
-    <link rel="stylesheet" href="css/start.css">
-
+    <link rel="stylesheet" href="css/start.css" />
   </head>
-  <body>
-    <h1>Do you want to play my game?</h1>
-    <h2>Press Arrow Up to avoid the obstacles and fly away!!</h2>
-    <div>
-      <button id="start">Start Game</button>
-    </div>
+  <body class="centered-wrapper">
+    <section>
+      <h1>FLY AWAY</h1>
+      <div class="instructions">
+        <p>Press the
+        <span id="arrow"></span>
+        key to fly and avoid the obstacles on your way</p>
+        <button id="start">START</button>
+      </div>
+    </section>
+    <div id="haku"></div>
     <script src="./js/start.js"></script>
   </body>
 </html>

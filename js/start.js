@@ -7,3 +7,5 @@ const startGameButton = document.getElementById('start');
     startGameButton.addEventListener("click", function() {
         location.href = 'letsplay.html';
     });
+
+    
