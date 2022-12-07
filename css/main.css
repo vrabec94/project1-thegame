@@ -65,6 +65,9 @@ body {
   border: 1px solid #888;
   width: 80%; /* Could be more or less, depending on screen size */
 }
+.obstacle {
+  border: 2px solid red;
+}
 .landscape-obstacle {
   background: url("../img/floating-island.png") no-repeat;
   background-size: 100%;
@@ -77,6 +80,8 @@ body {
 }
 .enemy {
   position: absolute;
+  background: url('../img/enemy.png') no-repeat;
+  background-size: 100% 100%;
   border: 2px solid red;
 }
 .shooting-ball {

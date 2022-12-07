@@ -46,7 +46,7 @@ class Player {
       }
     });
   }
-  
+
   moveUp() {
     this.gravitySpeed = 0;
     if (this.positionY < 100) {
@@ -155,7 +155,7 @@ class lowerObstacle extends Obstacle {
 
     if (ememyIsOnHouse) {
       this.oneEnemy = new Enemy(this.positionX, this.height);
-      boardElm.appendChild(this.oneEnemy.domElement); 
+      boardElm.appendChild(this.oneEnemy.domElement);
     }
   }
   moveLeft() {
@@ -166,7 +166,7 @@ class lowerObstacle extends Obstacle {
     if (this.oneEnemy !== null && this.oneEnemy !== undefined) {
       this.oneEnemy.updatePosition(this.positionX, this.positionY, this.height);
     }
-}
+  }
 }
 
 /* Initialising player, starting game */
@@ -189,7 +189,7 @@ const topObstacleArr = [];
 
 setInterval(() => {
   const bottomObstacles = new lowerObstacle(0, Math.random() * (35 - 10) + 10);
-  const topObstacles = new Obstacle(90, 10);
+  const topObstacles = new Obstacle(70, 10);
   bottomObstacleArr.push(bottomObstacles);
   topObstacleArr.push(topObstacles);
 }, 1000);
@@ -251,8 +251,8 @@ function handleObstacles(obstacles) {
 
 class Enemy {
   constructor(positionX, positionY) {
-    this.width = 2;
-    this.height = 3;
+    this.width = 3;
+    this.height = 10;
     this.positionX = positionX;
     this.positionY = positionY;
 
@@ -277,34 +277,31 @@ class Enemy {
     }
     if (this.positionX < 40) {
       this.positionX = posX;
-    this.positionY = posY + height - 10 + this.enemyPositionCounter;
-    this.domElement.style.bottom = this.positionY + "vh";
-    this.domElement.style.left = this.positionX + "vw";
-    this.enemyPositionCounter++;
-    detectEnemyCollision(this);
+      this.positionY = posY + height - 10 + this.enemyPositionCounter;
+      this.domElement.style.bottom = this.positionY + "vh";
+      this.domElement.style.left = this.positionX + "vw";
+      this.enemyPositionCounter++;
+      detectEnemyCollision(this);
     } else {
-    this.positionX = posX;
-    this.positionY = posY + height - 10;
-    this.domElement.style.bottom = this.positionY + "vh";
-    this.domElement.style.left = this.positionX + "vw";
-    detectEnemyCollision(this);
+      this.positionX = posX;
+      this.positionY = posY + height - 10;
+      this.domElement.style.bottom = this.positionY + "vh";
+      this.domElement.style.left = this.positionX + "vw";
+      detectEnemyCollision(this);
     }
   }
 }
 
 function detectEnemyCollision(enemy) {
-    if (
-      player.positionX < enemy.positionX + enemy.width &&
+  if (
+    player.positionX < enemy.positionX + enemy.width &&
     player.positionX + player.width > enemy.positionX &&
     player.positionY < enemy.positionY + enemy.height &&
     player.height + player.positionY > enemy.positionY
-    ) {
-      location.href = "gameover.html";
-    }
+  ) {
+    location.href = "gameover.html";
+  }
 }
-
-
-
 
 class Shooter {
   constructor() {
@@ -338,23 +335,25 @@ class Shooter {
         this.shooter.remove();
       }
       if (this.positionY > 0) {
-      this.detectShooterCollision();
+        this.detectShooterCollision();
       }
     }, 100);
   }
+
   detectShooterCollision() {
-    bottomObstacleArr.forEach((obstacle) => {
-      if (obstacle.oneEnemy !== null && obstacle.oneEnemy !== undefined) {
-        if (
-          this.positionX < obstacle.oneEnemy.positionX + obstacle.oneEnemy.width &&
-          this.positionX + this.width > obstacle.oneEnemy.positionX &&
-          this.positionY < obstacle.oneEnemy.positionY + obstacle.oneEnemy.height &&
-          this.height + this.positionY > obstacle.oneEnemy.positionY
-        ) {
-          console.log(obstacle.oneEnemy.domElement);
-          obstacle.oneEnemy.domElement.remove();
-          obstacle.oneEnemy = null;
-        }
+    const allEnemies = bottomObstacleArr.filter((obstacle) => {
+      return obstacle.oneEnemy !== null && obstacle.oneEnemy !== undefined;
+    });
+    allEnemies.forEach((obstacle) => {
+      if (
+        this.positionX < obstacle.oneEnemy.positionX + obstacle.oneEnemy.width &&
+        this.positionX + this.width > obstacle.oneEnemy.positionX &&
+        this.positionY < obstacle.oneEnemy.positionY + obstacle.oneEnemy.height &&
+        this.height + this.positionY > obstacle.oneEnemy.positionY
+      ) {
+        console.log(obstacle.oneEnemy.domElement);
+        obstacle.oneEnemy.domElement.remove();
+        obstacle.oneEnemy = null;
       }
     });
   }
