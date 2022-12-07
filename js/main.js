@@ -39,18 +39,15 @@ class Player {
     document.addEventListener("keydown", (event) => {
       if (event.key === "ArrowUp") {
         player.moveUp();
-        //player.shoot();
         console.log("Key UP");
       }
     });
-    /*
     document.addEventListener("keydown", (event2) => {
       if (event2.key === " ") {
         player.shoot();
         console.log("SHOOT");
       }
     });
-    */
   }
   
   moveUp() {
@@ -68,12 +65,10 @@ class Player {
       this.domElement.style.bottom = this.positionY + "vh";
     }
   }
-  /*
   shoot() {
     const shooting = new Shooter();
     shooting.moveDown();
   }
-  */
 }
 
 /** class Obstacle
@@ -217,11 +212,8 @@ function detectCollision(oneObstacle) {
     player.positionY < oneObstacle.positionY + oneObstacle.height &&
     player.height + player.positionY > oneObstacle.positionY
   ) {
-    console.log("Position X " + oneObstacle.positionX);
-    console.log("Width " + oneObstacle.width);
-    console.log("Height " + oneObstacle.height);
-    console.log("IT WORKED OMFFFGGGG");
-    //location.href = "gameover.html";
+    //console.log("IT WORKED OMFFFGGGG");
+    location.href = "gameover.html";
   }
   if (oneObstacle.oneEnemy !== null && oneObstacle.oneEnemy !== undefined) {
     if (oneObstacle.positionX < 40) {
@@ -287,19 +279,22 @@ class Enemy {
     this.domElement.style.bottom = this.positionY + "vh";
   }
   updatePosition(posX, posY, height) {
+    if (this.positionX < 0) {
+      this.domElement.remove();
+    }
     if (this.positionX < 40) {
       this.positionX = posX;
     this.positionY = posY + height - 10 + this.enemyPositionCounter;
     this.domElement.style.bottom = this.positionY + "vh";
     this.domElement.style.left = this.positionX + "vw";
     this.enemyPositionCounter++;
-    detectCollision(this);
+    detectEnemyCollision(this);
     } else {
     this.positionX = posX;
     this.positionY = posY + height - 10;
     this.domElement.style.bottom = this.positionY + "vh";
     this.domElement.style.left = this.positionX + "vw";
-    detectCollision(this);
+    detectEnemyCollision(this);
     }
   }
 }
@@ -307,27 +302,28 @@ function handleEnemies(obstacleOfEnemy, enemy) {
   enemy.moveUp();
   //detectEnemyCollision(obstacleOfEnemy, enemy);
 }
-function detectEnemyCollision(obstacleOfEnemy, enemy) {
-  //console.log("playerX " + player.positionX + " player Y " + player.positionY);
-  //console.log("enemy X " + obstacleOfEnemy.positionX + " enemy Y " + enemy.positionY);
-  //enemy.positionY is always bigger than player.height + player.positionY
-  if (obstacleOfEnemy.positionX > 0) {
+function detectEnemyCollision(enemy) {
+  /*
+    const style = window.getComputedStyle(domElement),
+    const posXofEnemy = style.getPropertyValue('left');
+    const posXofEnemy = style.getPropertyValue('left');
+*/
     if (
-      player.positionX < obstacleOfEnemy.positionX + enemy.width &&
-      player.positionX + player.width > obstacleOfEnemy.positionX &&
-      player.positionY < enemy.positionY + enemy.height &&
-      player.height + player.positionY > enemy.positionY
+      player.positionX < enemy.positionX + enemy.width &&
+    player.positionX + player.width > enemy.positionX &&
+    player.positionY < enemy.positionY + enemy.height &&
+    player.height + player.positionY > enemy.positionY
     ) {
       //console.log("playerX " + player.positionX + " player Y " + player.positionY);
       //console.log("enemy X " + obstacleOfEnemy.positionX + " enemy Y " + enemy.positionY);
       console.log("COLLISION DETECTED");
+      location.href = "gameover.html";
     }
-  }
 }
 
 
 
-/*
+
 class Shooter {
   constructor() {
     this.positionX = player.positionX + player.width;
@@ -357,11 +353,7 @@ class Shooter {
       this.positionX++;
       this.shooter.style.left = this.positionX + "vw";
       if (this.positionY < 0) {
-        //console.log("out of board!!!");
         this.shooter.remove();
-        //const boardElm = document.getElementById("game-environment")
-        //boardElm.removeChild(this.shooter);
-        //console.log(this.shooter);
       }
       if (this.positionY > 0) {
       this.detectShooterCollision();
@@ -370,22 +362,18 @@ class Shooter {
   }
   detectShooterCollision() {
     bottomObstacleArr.forEach((obstacle) => {
-      //console.log("shooter " + this.positionX + " shooter " + this.positionY); 
       if (obstacle.oneEnemy !== null && obstacle.oneEnemy !== undefined) {
         if (
-          this.positionX < obstacle.positionX + obstacle.oneEnemy.width &&
-          this.positionX + this.width > obstacle.positionX &&
+          this.positionX < obstacle.oneEnemy.positionX + obstacle.oneEnemy.width &&
+          this.positionX + this.width > obstacle.oneEnemy.positionX &&
           this.positionY < obstacle.oneEnemy.positionY + obstacle.oneEnemy.height &&
           this.height + this.positionY > obstacle.oneEnemy.positionY
         ) {
-          //console.log("shooter " + this.positionX + " shooter Y " + this.positionY);
-          //console.log("enemy X " + obstacleOfEnemy.positionX + " enemy Y " + enemy.positionY);
-          console.log("COLLISION DETECTED");
+          console.log(obstacle.oneEnemy.domElement);
           obstacle.oneEnemy.domElement.remove();
-
+          obstacle.oneEnemy = null;
         }
       }
     });
   }
 }
-*/
