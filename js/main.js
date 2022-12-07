@@ -9,8 +9,8 @@
 
 class Player {
   constructor() {
-    this.width = 20;
-    this.height = 15;
+    this.width = 10;
+    this.height = 5;
     this.positionX = 5;
     this.positionY = 0;
     this.speedX = 0;
@@ -170,14 +170,14 @@ const bottomObstacleArr = [];
 const topObstacleArr = [];
 
 setInterval(() => {
-  const bottomObstacles = new lowerObstacle(0, Math.random() * (60 - 10) + 10);
+  const bottomObstacles = new lowerObstacle(0, Math.random() * (50 - 10) + 10);
   const topObstacles = new Obstacle(90, 10);
   bottomObstacleArr.push(bottomObstacles);
   topObstacleArr.push(topObstacles);
-}, 3000);
+}, 1000);
 
-setInterval(handleObstacles, 300, bottomObstacleArr);
-setInterval(handleObstacles, 300, topObstacleArr);
+setInterval(handleObstacles, 100, bottomObstacleArr);
+setInterval(handleObstacles, 100, topObstacleArr);
 
 /** Detect Collision
  *  between the player and the obstacles on the bottom and the top

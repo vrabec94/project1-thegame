@@ -28,13 +28,14 @@ body {
   height: 60%;
   width: 80%;
   border: 2px solid red;
-  background: url("../img/background-pixelated.png");
+  background: url("../img/lake-wallpaper.jpg") no-repeat;
+  background-size: 100%;
   overflow: hidden;
 }
 #player {
   position: absolute;
   border: 2px solid red;
-  background: url("../img/haku-chihiro-in-pixels.png") no-repeat;
+  background: url("../img/hakuandchihiro.png") no-repeat;
   padding: 1%;
   margin: -1%;
   background-size: 100% 100%;
