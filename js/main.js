@@ -19,6 +19,7 @@ class Player {
     this.gravitySpeed = 0;
 
     this.domElement = null;
+    this.shooter = null;
     this.createDomElement();
   }
 
@@ -38,7 +39,14 @@ class Player {
     document.addEventListener("keydown", (event) => {
       if (event.key === "ArrowUp") {
         player.moveUp();
+        //player.shoot();
         console.log("Key UP");
+      }
+    });
+    document.addEventListener("keydown", (event2) => {
+      if (event2.key === " ") {
+        player.shoot();
+        console.log("SHOOT");
       }
     });
   }
@@ -56,6 +64,10 @@ class Player {
       this.positionY -= this.speedY + this.gravitySpeed;
       this.domElement.style.bottom = this.positionY + "vh";
     }
+  }
+  shoot() {
+    const shooting = new Shooter();
+    shooting.moveDown();
   }
 }
 
@@ -108,7 +120,6 @@ class lowerObstacle extends Obstacle {
     super(width, positionX);
     this.positionY = positionY;
     this.height = height;
-    
 
     this.domElement = null;
     this.oneEnemy = null;
@@ -174,10 +185,10 @@ setInterval(() => {
   const topObstacles = new Obstacle(90, 10);
   bottomObstacleArr.push(bottomObstacles);
   topObstacleArr.push(topObstacles);
-}, 1000);
+}, 3000);
 
-setInterval(handleObstacles, 100, bottomObstacleArr);
-setInterval(handleObstacles, 100, topObstacleArr);
+setInterval(handleObstacles, 300, bottomObstacleArr);
+setInterval(handleObstacles, 300, topObstacleArr);
 
 /** Detect Collision
  *  between the player and the obstacles on the bottom and the top
@@ -230,8 +241,8 @@ function handleObstacles(obstacles) {
 
 class Enemy {
   constructor() {
-    this.width = 20;
-    this.height = 20;
+    this.width = 2;
+    this.height = 3;
     this.positionX = 0;
     this.positionY = 0;
 
@@ -243,10 +254,10 @@ class Enemy {
     this.domElement = document.createElement("div");
 
     this.domElement.className = "enemy";
-    this.domElement.style.width = this.width + "%";
-    this.domElement.style.height = this.height + "%";
-    this.domElement.style.bottom = this.positionY + "%";
-    this.domElement.style.left = this.positionX + "%";
+    this.domElement.style.width = this.width + "vw";
+    this.domElement.style.height = this.height + "vh";
+    this.domElement.style.bottom = this.positionY + "vh";
+    this.domElement.style.left = this.positionX + "vw";
   }
   moveUp() {
     this.positionY += 1;
@@ -272,5 +283,37 @@ function detectEnemyCollision(obstacleOfEnemy, enemy) {
       //console.log("enemy X " + obstacleOfEnemy.positionX + " enemy Y " + enemy.positionY);
       console.log("COLLISION DETECTED");
     }
+  }
+}
+
+class Shooter {
+  constructor() {
+    this.positionX = player.positionX + player.width;
+    this.positionY = player.positionY + player.height;
+    this.width = 2;
+    this.height = 3;
+
+    this.shooter = null;
+    this.createShooter();
+  }
+  createShooter() {
+    this.shooter = document.createElement("div");
+
+    this.shooter.className = "shooting-ball";
+    this.shooter.style.width = this.width + "vw";
+    this.shooter.style.height = this.height + "vh";
+    this.shooter.style.bottom = this.positionY + "vh";
+    this.shooter.style.left = this.positionX + "vw";
+
+    const boardElement = document.getElementById("game-environment");
+    boardElement.appendChild(this.shooter);
+  }
+  moveDown() {
+    setInterval(() => {
+      this.positionY--;
+      this.shooter.style.bottom = this.positionY + "vh";
+      this.positionX++;
+      this.shooter.style.left = this.positionX + "vw";
+    }, 100);
   }
 }
