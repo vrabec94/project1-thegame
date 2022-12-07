@@ -19,7 +19,6 @@ class Player {
     this.gravitySpeed = 0;
 
     this.domElement = null;
-    //this.shooter = null;
     this.createDomElement();
   }
 
@@ -212,15 +211,16 @@ function detectCollision(oneObstacle) {
     player.positionY < oneObstacle.positionY + oneObstacle.height &&
     player.height + player.positionY > oneObstacle.positionY
   ) {
-    //console.log("IT WORKED OMFFFGGGG");
     location.href = "gameover.html";
   }
+  /*
   if (oneObstacle.oneEnemy !== null && oneObstacle.oneEnemy !== undefined) {
     if (oneObstacle.positionX < 40) {
       //detectEnemyCollision();
       handleEnemies(oneObstacle, oneObstacle.oneEnemy);
     } 
   }
+  */
 }
 /** Remove Obstacles
  *  removes Obstacles from array and from the html document
@@ -245,9 +245,7 @@ function handleObstacles(obstacles) {
   obstacles.forEach((oneObstacle) => {
     oneObstacle.moveLeft();
 
-    //oneObstacle.oneEnemy.moveUp();
-
-    //detectCollision(oneObstacle);
+    detectCollision(oneObstacle);
 
     removeObstacles(oneObstacle);
   });
@@ -274,10 +272,7 @@ class Enemy {
     this.domElement.style.bottom = this.positionY + "vh";
     this.domElement.style.left = this.positionX + "vw";
   }
-  moveUp() {
-    this.positionY += 1;
-    this.domElement.style.bottom = this.positionY + "vh";
-  }
+
   updatePosition(posX, posY, height) {
     if (this.positionX < 0) {
       this.domElement.remove();
@@ -298,25 +293,14 @@ class Enemy {
     }
   }
 }
-function handleEnemies(obstacleOfEnemy, enemy) {
-  enemy.moveUp();
-  //detectEnemyCollision(obstacleOfEnemy, enemy);
-}
+
 function detectEnemyCollision(enemy) {
-  /*
-    const style = window.getComputedStyle(domElement),
-    const posXofEnemy = style.getPropertyValue('left');
-    const posXofEnemy = style.getPropertyValue('left');
-*/
     if (
       player.positionX < enemy.positionX + enemy.width &&
     player.positionX + player.width > enemy.positionX &&
     player.positionY < enemy.positionY + enemy.height &&
     player.height + player.positionY > enemy.positionY
     ) {
-      //console.log("playerX " + player.positionX + " player Y " + player.positionY);
-      //console.log("enemy X " + obstacleOfEnemy.positionX + " enemy Y " + enemy.positionY);
-      console.log("COLLISION DETECTED");
       location.href = "gameover.html";
     }
 }
