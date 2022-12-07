@@ -19,7 +19,7 @@ class Player {
     this.gravitySpeed = 0;
 
     this.domElement = null;
-    this.shooter = null;
+    //this.shooter = null;
     this.createDomElement();
   }
 
@@ -43,13 +43,16 @@ class Player {
         console.log("Key UP");
       }
     });
+    /*
     document.addEventListener("keydown", (event2) => {
       if (event2.key === " ") {
         player.shoot();
         console.log("SHOOT");
       }
     });
+    */
   }
+  
   moveUp() {
     this.gravitySpeed = 0;
     if (this.positionY < 100) {
@@ -65,10 +68,12 @@ class Player {
       this.domElement.style.bottom = this.positionY + "vh";
     }
   }
+  /*
   shoot() {
     const shooting = new Shooter();
     shooting.moveDown();
   }
+  */
 }
 
 /** class Obstacle
@@ -94,10 +99,10 @@ class Obstacle {
     this.domElement = document.createElement("div");
 
     this.domElement.className = "obstacle";
-    this.domElement.style.width = this.width + "%";
-    this.domElement.style.height = this.height + "%";
-    this.domElement.style.bottom = this.positionY + "%";
-    this.domElement.style.left = this.positionX + "%";
+    this.domElement.style.width = this.width + "vw";
+    this.domElement.style.height = this.height + "vh";
+    this.domElement.style.bottom = this.positionY + "vh";
+    this.domElement.style.left = this.positionX + "vw";
 
     if (this.domElement.positionY !== 0) {
       this.domElement.style.background =
@@ -123,6 +128,7 @@ class lowerObstacle extends Obstacle {
 
     this.domElement = null;
     this.oneEnemy = null;
+    this.enemyPositionCounter = 0;
     this.firstDivInObst = null;
     this.secondDivInObst = null;
     this.createLowerDomElement();
@@ -153,13 +159,22 @@ class lowerObstacle extends Obstacle {
     this.domElement.appendChild(this.secondDivInObst);
     this.domElement.appendChild(this.firstDivInObst);
 
-    const ememyIsOnHouse = Math.random() < 0.3;
+    const ememyIsOnHouse = Math.random() < 0.9;
 
     if (ememyIsOnHouse) {
-      this.oneEnemy = new Enemy();
-      this.secondDivInObst.appendChild(this.oneEnemy.domElement);
+      this.oneEnemy = new Enemy(this.positionX, this.height);
+      boardElm.appendChild(this.oneEnemy.domElement); 
     }
   }
+  moveLeft() {
+    if (this.positionX + this.width > 0) {
+      this.positionX--;
+      this.domElement.style.left = this.positionX + "vw";
+    }
+    if (this.oneEnemy !== null && this.oneEnemy !== undefined) {
+      this.oneEnemy.updatePosition(this.positionX, this.positionY, this.height);
+    }
+}
 }
 
 /* Initialising player, starting game */
@@ -182,13 +197,13 @@ const topObstacleArr = [];
 
 setInterval(() => {
   const bottomObstacles = new lowerObstacle(0, Math.random() * (50 - 10) + 10);
-  const topObstacles = new Obstacle(90, 10);
+  //const topObstacles = new Obstacle(90, 10);
   bottomObstacleArr.push(bottomObstacles);
-  topObstacleArr.push(topObstacles);
-}, 3000);
+  //topObstacleArr.push(topObstacles);
+}, 9000);
 
 setInterval(handleObstacles, 300, bottomObstacleArr);
-setInterval(handleObstacles, 300, topObstacleArr);
+//setInterval(handleObstacles, 300, topObstacleArr);
 
 /** Detect Collision
  *  between the player and the obstacles on the bottom and the top
@@ -202,12 +217,17 @@ function detectCollision(oneObstacle) {
     player.positionY < oneObstacle.positionY + oneObstacle.height &&
     player.height + player.positionY > oneObstacle.positionY
   ) {
+    console.log("Position X " + oneObstacle.positionX);
+    console.log("Width " + oneObstacle.width);
+    console.log("Height " + oneObstacle.height);
+    console.log("IT WORKED OMFFFGGGG");
     //location.href = "gameover.html";
   }
   if (oneObstacle.oneEnemy !== null && oneObstacle.oneEnemy !== undefined) {
     if (oneObstacle.positionX < 40) {
+      //detectEnemyCollision();
       handleEnemies(oneObstacle, oneObstacle.oneEnemy);
-    }
+    } 
   }
 }
 /** Remove Obstacles
@@ -233,22 +253,25 @@ function handleObstacles(obstacles) {
   obstacles.forEach((oneObstacle) => {
     oneObstacle.moveLeft();
 
-    detectCollision(oneObstacle);
+    //oneObstacle.oneEnemy.moveUp();
+
+    //detectCollision(oneObstacle);
 
     removeObstacles(oneObstacle);
   });
 }
 
 class Enemy {
-  constructor() {
+  constructor(positionX, positionY) {
     this.width = 2;
     this.height = 3;
-    this.positionX = 0;
-    this.positionY = 0;
+    this.positionX = positionX;
+    this.positionY = positionY;
 
     this.domElement = null;
     this.createDomElement();
     this.closeToEnemy = null;
+    this.enemyPositionCounter = 0;
   }
   createDomElement() {
     this.domElement = document.createElement("div");
@@ -263,10 +286,26 @@ class Enemy {
     this.positionY += 1;
     this.domElement.style.bottom = this.positionY + "vh";
   }
+  updatePosition(posX, posY, height) {
+    if (this.positionX < 40) {
+      this.positionX = posX;
+    this.positionY = posY + height - 10 + this.enemyPositionCounter;
+    this.domElement.style.bottom = this.positionY + "vh";
+    this.domElement.style.left = this.positionX + "vw";
+    this.enemyPositionCounter++;
+    detectCollision(this);
+    } else {
+    this.positionX = posX;
+    this.positionY = posY + height - 10;
+    this.domElement.style.bottom = this.positionY + "vh";
+    this.domElement.style.left = this.positionX + "vw";
+    detectCollision(this);
+    }
+  }
 }
 function handleEnemies(obstacleOfEnemy, enemy) {
   enemy.moveUp();
-  detectEnemyCollision(obstacleOfEnemy, enemy);
+  //detectEnemyCollision(obstacleOfEnemy, enemy);
 }
 function detectEnemyCollision(obstacleOfEnemy, enemy) {
   //console.log("playerX " + player.positionX + " player Y " + player.positionY);
@@ -286,6 +325,9 @@ function detectEnemyCollision(obstacleOfEnemy, enemy) {
   }
 }
 
+
+
+/*
 class Shooter {
   constructor() {
     this.positionX = player.positionX + player.width;
@@ -314,6 +356,36 @@ class Shooter {
       this.shooter.style.bottom = this.positionY + "vh";
       this.positionX++;
       this.shooter.style.left = this.positionX + "vw";
+      if (this.positionY < 0) {
+        //console.log("out of board!!!");
+        this.shooter.remove();
+        //const boardElm = document.getElementById("game-environment")
+        //boardElm.removeChild(this.shooter);
+        //console.log(this.shooter);
+      }
+      if (this.positionY > 0) {
+      this.detectShooterCollision();
+      }
     }, 100);
   }
+  detectShooterCollision() {
+    bottomObstacleArr.forEach((obstacle) => {
+      //console.log("shooter " + this.positionX + " shooter " + this.positionY); 
+      if (obstacle.oneEnemy !== null && obstacle.oneEnemy !== undefined) {
+        if (
+          this.positionX < obstacle.positionX + obstacle.oneEnemy.width &&
+          this.positionX + this.width > obstacle.positionX &&
+          this.positionY < obstacle.oneEnemy.positionY + obstacle.oneEnemy.height &&
+          this.height + this.positionY > obstacle.oneEnemy.positionY
+        ) {
+          //console.log("shooter " + this.positionX + " shooter Y " + this.positionY);
+          //console.log("enemy X " + obstacleOfEnemy.positionX + " enemy Y " + enemy.positionY);
+          console.log("COLLISION DETECTED");
+          obstacle.oneEnemy.domElement.remove();
+
+        }
+      }
+    });
+  }
 }
+*/
