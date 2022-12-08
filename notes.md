@@ -54,3 +54,9 @@ ___________
 
 
 https://vrabec94.github.io/project1-thegame/img/pngwing.com.png
+
+img/temple1.png
+img/other-clouds.png
+does not work
+
+audio/the-dragon-boy-bottomless-pit.mp3
