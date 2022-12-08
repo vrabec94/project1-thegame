@@ -98,7 +98,7 @@ class Obstacle {
 
     if (this.domElement.positionY !== 0) {
       this.domElement.style.background =
-        'url("../img/final-clouds.png") no-repeat';
+        'url("img/other-clouds.png") no-repeat';
       this.domElement.style.backgroundSize = "80% 100%";
     }
 
