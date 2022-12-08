@@ -5,7 +5,8 @@ html, body {
     margin: 0;
   }
   body {
-    background: url('../img/bathhouse.jpg');
+    background: url("../img/bathhouse.jpg") no-repeat;
+  background-size: 100% 100%;
   }
   .centered-wrapper {
     position: relative;
@@ -53,6 +54,13 @@ html, body {
     margin-top: 2%;
     margin-bottom: 5%;
     font-size: 2em;
+  }
+  #shooter-boh {
+    position: absolute;
+    left: 50px;
+    bottom: 100px;
+    width: 20%;
+    height: 70%;
   }
   /* took button design from https://getcssscan.com/css-buttons-examples */
 #play-again {

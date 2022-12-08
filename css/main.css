@@ -6,7 +6,8 @@ html, body {
   margin: 0;
 }
 body {
-  background: url('../img/bathhouse.jpg');
+  background: url("../img/bathhouse.jpg") no-repeat;
+  background-size: 100% 100%;
 }
 .centered-wrapper {
   position: relative;
