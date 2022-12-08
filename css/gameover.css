@@ -25,13 +25,14 @@ html, body {
     width: 80%;
     background: url("../img/duck-bath-wallpaper.jpeg") no-repeat;
     background-size: 100%;
+    border: 5px solid #b78846;
   }
   .centered-text {
     display: inline-block;
     vertical-align: middle;
 
   }
-  h1, h2 {
+  h1, h2, h6 {
     text-align: block;
   font-family: "Times New Roman", Times, serif;
   font-size: 8em;
@@ -47,6 +48,11 @@ html, body {
     margin-top: 2%;
     margin-bottom: 5%;
     font-size: 3em;
+  }
+  h6 {
+    margin-top: 2%;
+    margin-bottom: 5%;
+    font-size: 2em;
   }
   /* took button design from https://getcssscan.com/css-buttons-examples */
 #play-again {
