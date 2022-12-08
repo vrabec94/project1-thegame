@@ -98,8 +98,8 @@ class Obstacle {
 
     if (this.domElement.positionY !== 0) {
       this.domElement.style.background =
-        'url("../img/cloud-pixel.png") no-repeat';
-      this.domElement.style.backgroundSize = "100% 100%";
+        'url("../img/final-clouds.png") no-repeat';
+      this.domElement.style.backgroundSize = "80% 100%";
     }
 
     const boardElm = document.getElementById("game-environment");
@@ -140,6 +140,8 @@ class lowerObstacle extends Obstacle {
     this.secondDivInObst.className = "house-obstacle";
     this.secondDivInObst.style.height = "10vh";
 
+    this.secondDivInObst.style.background = randomTemple();
+    this.secondDivInObst.style.backgroundSize = "100% 100%";
     this.firstDivInObst.className = "landscape-obstacle";
     this.firstDivInObst.style.top = "10vh";
     this.firstDivInObst.style.bottom = "0";
@@ -167,6 +169,13 @@ class lowerObstacle extends Obstacle {
       this.oneEnemy.updatePosition(this.positionX, this.positionY, this.height);
     }
   }
+}
+function randomTemple() {
+  const templeImg = ["../img/temple1.png", "../img/temple2.png", "../img/temple3.png", "../img/temple4.png", "../img/temple5.png"];
+  console.log("array length" + templeImg.length);
+  const randomImg = Math.floor(Math.random() * templeImg.length);
+  console.log('url(' + '"' + templeImg[randomImg] + '"' + ')');
+  return 'url(' + '"' + templeImg[randomImg] + '"' + ') no-repeat';
 }
 
 /* Initialising player, starting game */
@@ -209,7 +218,7 @@ function detectCollision(oneObstacle) {
     player.positionY < oneObstacle.positionY + oneObstacle.height &&
     player.height + player.positionY > oneObstacle.positionY
   ) {
-    location.href = "gameover.html";
+    //location.href = "gameover.html";
   }
   /*
   if (oneObstacle.oneEnemy !== null && oneObstacle.oneEnemy !== undefined) {
@@ -299,7 +308,7 @@ function detectEnemyCollision(enemy) {
     player.positionY < enemy.positionY + enemy.height &&
     player.height + player.positionY > enemy.positionY
   ) {
-    location.href = "gameover.html";
+    //location.href = "gameover.html";
   }
 }
 
