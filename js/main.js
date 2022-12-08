@@ -50,17 +50,17 @@ class Player {
     });
   }
   loosingEnergy() {
-    if (this.energy <= 0) {
+    if (this.energy <= 10) {
       location.href = "gameover.html";
     }
     this.energy -= 10;
-    console.log("Player has lost energy " + this.energy)
+    document.getElementById("fuel-bar").value = this.energy;
   }
   gainingEnergy() {
     if (this.energy < 100) {
       this.energy += 10;
     }
-    console.log("Player has gained energy " + this.energy)
+    document.getElementById("fuel-bar").value = this.energy;
   }
 
   moveUp() {
@@ -170,13 +170,13 @@ class lowerObstacle extends Obstacle {
     this.domElement.appendChild(this.secondDivInObst);
     this.domElement.appendChild(this.firstDivInObst);
 
-    const ememyIsOnHouse = Math.random() < 0.6;
+    const ememyIsOnHouse = Math.random() < 0.5;
 
     if (ememyIsOnHouse) {
       this.oneEnemy = new Enemy(this.positionX, this.height);
       boardElm.appendChild(this.oneEnemy.domElement);
     } else {
-      const makeFoodAppear = Math.random() < 1;
+      const makeFoodAppear = Math.random() < 0.7;
       if (makeFoodAppear) {
         this.foodItem = new FoodItem(this.positionX, this.positionY);
         boardElm.appendChild(this.foodItem.domElement);
@@ -253,7 +253,7 @@ function detectCollision(oneObstacle) {
     player.positionY < oneObstacle.positionY + oneObstacle.height &&
     player.height + player.positionY > oneObstacle.positionY
   ) {
-    //location.href = "gameover.html";
+    location.href = "gameover.html";
   }
 }
 /** Remove Obstacles
@@ -355,8 +355,9 @@ function detectEnemyCollision(enemy) {
       enemy.domElement.remove();
       enemy = null;
       player.gainingEnergy();
+    } else {
+      location.href = "gameover.html";
     }
-    //location.href = "gameover.html";
   }
 }
 
@@ -401,6 +402,9 @@ class Shooter {
     const allEnemies = bottomObstacleArr.filter((obstacle) => {
       return obstacle.oneEnemy !== null && obstacle.oneEnemy !== undefined;
     });
+    const allFoodItems = bottomObstacleArr.filter((obstacle) => {
+      return obstacle.foodItem !== null && obstacle.foodItem !== undefined;
+    });
     allEnemies.forEach((obstacle) => {
       if (
         this.positionX <
@@ -413,6 +417,19 @@ class Shooter {
         document.getElementById("shot-enemy").play();
         obstacle.oneEnemy.domElement.remove();
         obstacle.oneEnemy = null;
+      }
+    });
+    allFoodItems.forEach((obstacle) => {
+      if (
+        this.positionX <
+          obstacle.foodItem.positionX + obstacle.foodItem.width &&
+        this.positionX + this.width > obstacle.foodItem.positionX &&
+        this.positionY <
+          obstacle.foodItem.positionY + obstacle.foodItem.height &&
+        this.height + this.positionY > obstacle.foodItem.positionY
+      ) {
+        obstacle.foodItem.domElement.remove();
+        obstacle.foodItem = null;
       }
     });
   }

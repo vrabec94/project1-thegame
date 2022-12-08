@@ -7,6 +7,7 @@ html, body {
 }
 body {
   background: url("../img/bathhouse.jpg") no-repeat;
+  overflow: hidden;
   background-size: 100% 100%;
 }
 .centered-wrapper {
@@ -72,4 +73,13 @@ body {
   position: absolute;
   background: url('../img/shooter-boh.png') no-repeat;
   background-size: 100% 100%;
+}
+#box-of-fuel-bar {
+  position: absolute;
+  bottom: 30px;
+  right: 150px;
+}
+#fuel-bar {
+  width: 200px;
+  height: 50px;
 }
