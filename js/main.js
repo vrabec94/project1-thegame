@@ -196,94 +196,6 @@ class lowerObstacle extends Obstacle {
     }
   }
 }
-function randomTemple() {
-  const templeImg = [
-    "img/temple1.png",
-    "img/temple2.png",
-    "img/temple3.png",
-    "img/temple4.png",
-    "img/temple5.png",
-  ];
-  const randomImg = Math.floor(Math.random() * templeImg.length);
-  return "url(" + '"' + templeImg[randomImg] + '"' + ") no-repeat";
-}
-
-/* Initialising player, starting game */
-const player = new Player();
-player.attachEventListeners();
-
-/* Make the Player fall down consistently */
-setInterval(() => {
-  player.moveDown();
-}, 100);
-
-/* Make the Player loose energy every 5 seconds */
-setInterval(function () {
-  player.loosingEnergy();
-}, 5000);
-
-/** Create obstacles
- * - fill two arrays with obstacles with a delay of 0.5 seconds inbetween
- *   to create obstacles consistently on top and bottom
- * - bottom obstacles are created with a random height between 10 and 60
- */
-
-const bottomObstacleArr = [];
-const topObstacleArr = [];
-
-setInterval(() => {
-  const bottomObstacles = new lowerObstacle(0, Math.random() * (35 - 10) + 10);
-  const topObstacles = new Obstacle(70, 10);
-  bottomObstacleArr.push(bottomObstacles);
-  topObstacleArr.push(topObstacles);
-}, 1000);
-
-setInterval(handleObstacles, 100, bottomObstacleArr);
-setInterval(handleObstacles, 100, topObstacleArr);
-
-/** Detect Collision
- *  between the player and the obstacles on the bottom and the top
- *  redirects to a new page if collision is detected
- */
-
-function detectCollision(oneObstacle) {
-  if (
-    player.positionX < oneObstacle.positionX + oneObstacle.width &&
-    player.positionX + player.width > oneObstacle.positionX &&
-    player.positionY < oneObstacle.positionY + oneObstacle.height &&
-    player.height + player.positionY > oneObstacle.positionY
-  ) {
-    location.href = "gameover.html";
-  }
-}
-/** Remove Obstacles
- *  removes Obstacles from array and from the html document
- *  if they move outside of the game area
- */
-function removeObstacles(oneObstacle) {
-  if (oneObstacle.positionX + oneObstacle.width <= 0) {
-    oneObstacle.domElement.remove();
-    if (oneObstacle.positionY === 0) {
-      bottomObstacleArr.shift();
-      //console.log("removed.. array length is now" + bottomObstacleArr.length);
-    } else if (oneObstacle.positionY === 90) {
-      topObstacleArr.shift();
-    }
-  }
-}
-/** handle Obstacles
- *  iterates through the arrays of bottom and top
- *  arrays
- */
-function handleObstacles(obstacles) {
-  obstacles.forEach((oneObstacle) => {
-    oneObstacle.moveLeft();
-
-    detectCollision(oneObstacle);
-
-    removeObstacles(oneObstacle);
-  });
-}
 
 class Enemy {
   constructor(positionX, positionY) {
@@ -340,24 +252,6 @@ class FoodItem extends Enemy {
     this.createDomElement(this.className);
 
     this.fuelPositionCounter = 0;
-  }
-}
-
-function detectEnemyCollision(enemy) {
-  if (
-    player.positionX < enemy.positionX + enemy.width &&
-    player.positionX + player.width > enemy.positionX &&
-    player.positionY < enemy.positionY + enemy.height &&
-    player.height + player.positionY > enemy.positionY
-  ) {
-    if (enemy instanceof FoodItem) {
-      document.getElementById("success").play();
-      enemy.domElement.remove();
-      enemy = null;
-      player.gainingEnergy();
-    } else {
-      location.href = "gameover.html";
-    }
   }
 }
 
@@ -432,5 +326,111 @@ class Shooter {
         obstacle.foodItem = null;
       }
     });
+  }
+}
+
+function randomTemple() {
+  const templeImg = [
+    "img/temple1.png",
+    "img/temple2.png",
+    "img/temple3.png",
+    "img/temple4.png",
+    "img/temple5.png",
+  ];
+  const randomImg = Math.floor(Math.random() * templeImg.length);
+  return "url(" + '"' + templeImg[randomImg] + '"' + ") no-repeat";
+}
+
+/* Initialising player, starting game */
+const player = new Player();
+player.attachEventListeners();
+
+/* Make the Player fall down consistently */
+setInterval(() => {
+  player.moveDown();
+}, 100);
+
+/* Make the Player loose energy every 5 seconds */
+setInterval(function () {
+  player.loosingEnergy();
+}, 5000);
+
+/** Create obstacles
+ * - fill two arrays with obstacles with a delay of 0.5 seconds inbetween
+ *   to create obstacles consistently on top and bottom
+ * - bottom obstacles are created with a random height between 10 and 60
+ */
+
+const bottomObstacleArr = [];
+const topObstacleArr = [];
+
+setInterval(() => {
+  const bottomObstacles = new lowerObstacle(0, Math.random() * (35 - 10) + 10);
+  const topObstacles = new Obstacle(70, 10);
+  bottomObstacleArr.push(bottomObstacles);
+  topObstacleArr.push(topObstacles);
+}, 1000);
+
+setInterval(handleObstacles, 100, bottomObstacleArr);
+setInterval(handleObstacles, 100, topObstacleArr);
+
+/** Detect Collision
+ *  between the player and the obstacles on the bottom and the top
+ *  redirects to a new page if collision is detected
+ */
+
+function detectCollision(oneObstacle) {
+  if (
+    player.positionX < oneObstacle.positionX + oneObstacle.width &&
+    player.positionX + player.width > oneObstacle.positionX &&
+    player.positionY < oneObstacle.positionY + oneObstacle.height &&
+    player.height + player.positionY > oneObstacle.positionY
+  ) {
+    location.href = "gameover.html";
+  }
+}
+/** Remove Obstacles
+ *  removes Obstacles from array and from the html document
+ *  if they move outside of the game area
+ */
+function removeObstacles(oneObstacle) {
+  if (oneObstacle.positionX + oneObstacle.width <= 0) {
+    oneObstacle.domElement.remove();
+    if (oneObstacle.positionY === 0) {
+      bottomObstacleArr.shift();
+    } else if (oneObstacle.positionY === 90) {
+      topObstacleArr.shift();
+    }
+  }
+}
+/** handle Obstacles
+ *  iterates through the arrays of bottom and top
+ *  arrays
+ */
+function handleObstacles(obstacles) {
+  obstacles.forEach((oneObstacle) => {
+    oneObstacle.moveLeft();
+
+    detectCollision(oneObstacle);
+
+    removeObstacles(oneObstacle);
+  });
+}
+
+function detectEnemyCollision(enemy) {
+  if (
+    player.positionX < enemy.positionX + enemy.width &&
+    player.positionX + player.width > enemy.positionX &&
+    player.positionY < enemy.positionY + enemy.height &&
+    player.height + player.positionY > enemy.positionY
+  ) {
+    if (enemy instanceof FoodItem) {
+      document.getElementById("success").play();
+      enemy.domElement.remove();
+      enemy = null;
+      player.gainingEnergy();
+    } else {
+      location.href = "gameover.html";
+    }
   }
 }

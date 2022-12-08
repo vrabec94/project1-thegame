@@ -51,23 +51,3 @@ Wishlist
     <div class="enemy"></div>
 
 </div>
-
-
-new Enemy(this.positionX , this.positionY)
-
-
-class Enemy {
-    constructor(posX, posY) {
-
-
-___________
-
-- aim for descriptive names.
-- (super bonus) class Game
-  - this.bottomObstacleArr = [];
-  - this.topObstacleArr = [];
-  - start() {
-        //....
-        this.detectCollision();
-        //....
-  }
