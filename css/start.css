@@ -1,4 +1,3 @@
-/* make sure the game-environment is centered horizontally and vertically */
 html,
 body {
   width: 100%;
@@ -13,28 +12,6 @@ body {
   flex-wrap: nowrap;
   justify-content: space-between;
 }
-/*
-.centered-wrapper {
-  position: relative;
-  text-align: center;
-}
-.centered-wrapper:before {
-  content: "";
-  position: relative;
-  display: inline-block;
-  width: 0;
-  height: 100%;
-  vertical-align: middle;
-}
-.centered-content {
-  display: inline-block;
-  vertical-align: middle;
-  height: 60%;
-  width: 80%;
-  background: url("../img/background-startup.jpg") no-repeat;
-  background-size: 100% 95%;
-}
-*/
 h1, h6,
 p {
   margin-top: 5%;
@@ -71,7 +48,7 @@ p {
   margin-left: 5%;
   margin-right: 5%;
   margin-bottom: -2%;
-  background: url("../img/arrow-up.png") no-repeat;
+  background: url("../img/white-arrow-up.png") no-repeat;
   background-size: contain;
 }
 #space-bar {
@@ -82,6 +59,14 @@ p {
   margin-right: 5%;
   margin-bottom: -7%;
   background: url("../img/spacebar-edited.png") no-repeat;
+  background-size: contain;
+}
+#sushiroll {
+  display: inline-block;
+  width: 20%;
+  height: 40px;
+  margin-left: 5%;
+  background: url("../img/crazy-cute-sushi.png") no-repeat;
   background-size: contain;
 }
 .instructions {
