@@ -7,6 +7,7 @@ html, body {
 }
 body {
   background: url("../img/bathhouse.jpg") no-repeat;
+  overflow: hidden;
   background-size: 100% 100%;
 }
 .centered-wrapper {
@@ -61,8 +62,35 @@ body {
   background: url('../img/enemy.png') no-repeat;
   background-size: 100% 100%;
 }
+.fuel {
+  position: absolute;
+  background: url('../img/crazy-cute-sushi.png') no-repeat;
+  background-size: 100% 100%;
+}
 .shooting-ball {
   position: absolute;
   background: url('../img/shooter-boh.png') no-repeat;
   background-size: 100% 100%;
+}
+#box-of-fuel-bar {
+  position: absolute;
+  display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: space-between;
+	align-items: center;
+	align-content: stretch;
+  bottom: 5px;
+  right: 150px;
+}
+#fuel-bar {
+  width: 200px;
+  height: 50px;
+}
+p {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 1.5em;
+  color: aliceblue;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+  margin-right: 20px;
 }

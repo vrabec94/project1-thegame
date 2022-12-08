@@ -112,3 +112,5 @@ position: absolute;
       right: -2px;
     }
   }
+  <label for="disk_c">Disk usage C:</label>
+<meter id="disk_c" value="2" min="0" max="10">2 out of 10</meter><br>

@@ -1,27 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FLY AWAY</title>
 
     <link rel="stylesheet" href="./css/main.css" />
-    <audio id="wings" style="display:none">
-        <source src="audio/giant-wings.mp3" type="audio/mpeg"> Your browser does not support the audio element.
-      </audio>
-      <audio id="shooter-boh" style="display:none">
-        <source src="audio/shooter-boh.mp3" type="audio/mpeg"> Your browser does not support the audio element.
+    <audio id="wings" style="display: none">
+      <source src="audio/giant-wings.mp3" type="audio/mpeg" />
+      Your browser does not support the audio element.
     </audio>
-    <audio id="success" style="display:none">
-        <source src="audio/success.mp3" type="audio/mpeg"> Your browser does not support the audio element.
+    <audio id="shooter-boh" style="display: none">
+      <source src="audio/shooter-boh.mp3" type="audio/mpeg" />
+      Your browser does not support the audio element.
     </audio>
-</head>
-<body class="centered-wrapper">
+    <audio id="success" style="display: none">
+      <source src="audio/success.mp3" type="audio/mpeg" />
+      Your browser does not support the audio element.
+    </audio>
+    <audio id="shot-enemy" style="display: none">
+      <source src="audio/muffled-explosion.mp3" type="audio/mpeg" />
+      Your browser does not support the audio element.
+    </audio>
+  </head>
+  <body class="centered-wrapper">
     <div id="game-environment" class="centered-content"></div>
+    <div id="box-of-fuel-bar">
+        <p>ENERGY</p>
+      <meter id="fuel-bar" value="100" min="0" low="34" max="100"></meter>
+    </div>
     <audio preload="auto" autoplay loop>
-        <source src="audio/the-dragon-boy-bottomless-pit.mp3" type="audio/mp3">
-      </audio>
+      <source src="audio/the-dragon-boy-bottomless-pit.mp3" type="audio/mp3" />
+    </audio>
     <script src="./js/main.js"></script>
-</body>
+  </body>
 </html>
