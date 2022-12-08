@@ -37,11 +37,13 @@ class Player {
   attachEventListeners() {
     document.addEventListener("keydown", (event) => {
       if (event.key === "ArrowUp") {
+        document.getElementById('wings').play();
         player.moveUp();
       }
     });
     document.addEventListener("keydown", (event2) => {
       if (event2.key === " ") {
+        document.getElementById('shooter-boh').play();
         player.shoot();
       }
     });
@@ -218,6 +220,7 @@ function detectCollision(oneObstacle) {
     player.positionY < oneObstacle.positionY + oneObstacle.height &&
     player.height + player.positionY > oneObstacle.positionY
   ) {
+    document.getElementById('game-is-over').play();
     //location.href = "gameover.html";
   }
   /*
@@ -360,7 +363,7 @@ class Shooter {
         this.positionY < obstacle.oneEnemy.positionY + obstacle.oneEnemy.height &&
         this.height + this.positionY > obstacle.oneEnemy.positionY
       ) {
-        console.log(obstacle.oneEnemy.domElement);
+        document.getElementById('success').play();
         obstacle.oneEnemy.domElement.remove();
         obstacle.oneEnemy = null;
       }

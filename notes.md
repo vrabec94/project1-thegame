@@ -60,3 +60,4 @@ img/other-clouds.png
 does not work
 
 audio/the-dragon-boy-bottomless-pit.mp3
+audio/spirited-away-theme-song.mp3
