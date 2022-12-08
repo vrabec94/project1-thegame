@@ -5,7 +5,6 @@
 document.getElementById('game-is-over').onplay();
 
 const gameOverButton = document.getElementById('play-again');
-console.log(gameOverButton);
     gameOverButton.addEventListener("click", function() {
         location.href = 'letsplay.html';
     });

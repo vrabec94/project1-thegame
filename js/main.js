@@ -37,13 +37,13 @@ class Player {
   attachEventListeners() {
     document.addEventListener("keydown", (event) => {
       if (event.key === "ArrowUp") {
-        document.getElementById('wings').play();
+        document.getElementById("wings").play();
         player.moveUp();
       }
     });
     document.addEventListener("keydown", (event2) => {
       if (event2.key === " ") {
-        document.getElementById('shooter-boh').play();
+        document.getElementById("shooter-boh").play();
         player.shoot();
       }
     });
@@ -173,11 +173,17 @@ class lowerObstacle extends Obstacle {
   }
 }
 function randomTemple() {
-  const templeImg = ["img/temple1.png", "img/temple2.png", "img/temple3.png", "img/temple4.png", "img/temple5.png"];
+  const templeImg = [
+    "img/temple1.png",
+    "img/temple2.png",
+    "img/temple3.png",
+    "img/temple4.png",
+    "img/temple5.png",
+  ];
   console.log("array length" + templeImg.length);
   const randomImg = Math.floor(Math.random() * templeImg.length);
-  console.log('url(' + '"' + templeImg[randomImg] + '"' + ')');
-  return 'url(' + '"' + templeImg[randomImg] + '"' + ') no-repeat';
+  console.log("url(" + '"' + templeImg[randomImg] + '"' + ")");
+  return "url(" + '"' + templeImg[randomImg] + '"' + ") no-repeat";
 }
 
 /* Initialising player, starting game */
@@ -220,8 +226,8 @@ function detectCollision(oneObstacle) {
     player.positionY < oneObstacle.positionY + oneObstacle.height &&
     player.height + player.positionY > oneObstacle.positionY
   ) {
-    document.getElementById('game-is-over').play();
-    //location.href = "gameover.html";
+    document.getElementById("game-is-over").play();
+    location.href = "gameover.html";
   }
   /*
   if (oneObstacle.oneEnemy !== null && oneObstacle.oneEnemy !== undefined) {
@@ -311,7 +317,7 @@ function detectEnemyCollision(enemy) {
     player.positionY < enemy.positionY + enemy.height &&
     player.height + player.positionY > enemy.positionY
   ) {
-    //location.href = "gameover.html";
+    location.href = "gameover.html";
   }
 }
 
@@ -358,12 +364,14 @@ class Shooter {
     });
     allEnemies.forEach((obstacle) => {
       if (
-        this.positionX < obstacle.oneEnemy.positionX + obstacle.oneEnemy.width &&
+        this.positionX <
+          obstacle.oneEnemy.positionX + obstacle.oneEnemy.width &&
         this.positionX + this.width > obstacle.oneEnemy.positionX &&
-        this.positionY < obstacle.oneEnemy.positionY + obstacle.oneEnemy.height &&
+        this.positionY <
+          obstacle.oneEnemy.positionY + obstacle.oneEnemy.height &&
         this.height + this.positionY > obstacle.oneEnemy.positionY
       ) {
-        document.getElementById('success').play();
+        document.getElementById("success").play();
         obstacle.oneEnemy.domElement.remove();
         obstacle.oneEnemy = null;
       }
