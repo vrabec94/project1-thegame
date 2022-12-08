@@ -171,7 +171,7 @@ class lowerObstacle extends Obstacle {
   }
 }
 function randomTemple() {
-  const templeImg = ["../img/temple1.png", "../img/temple2.png", "../img/temple3.png", "../img/temple4.png", "../img/temple5.png"];
+  const templeImg = ["/img/temple1.png", "/img/temple2.png", "/img/temple3.png", "/img/temple4.png", "/img/temple5.png"];
   console.log("array length" + templeImg.length);
   const randomImg = Math.floor(Math.random() * templeImg.length);
   console.log('url(' + '"' + templeImg[randomImg] + '"' + ')');
