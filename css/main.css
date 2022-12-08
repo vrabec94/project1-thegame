@@ -60,6 +60,13 @@ body {
   position: absolute;
   background: url('../img/enemy.png') no-repeat;
   background-size: 100% 100%;
+  border: 2px solid red;
+}
+.fuel {
+  position: absolute;
+  background: url('../img/crazy-cute-sushi.png') no-repeat;
+  background-size: 100% 100%;
+  border: 2px solid red;
 }
 .shooting-ball {
   position: absolute;

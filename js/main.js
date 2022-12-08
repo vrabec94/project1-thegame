@@ -19,6 +19,7 @@ class Player {
     this.gravitySpeed = 0;
 
     this.domElement = null;
+    this.energy = 100;
     this.createDomElement();
   }
 
@@ -47,6 +48,19 @@ class Player {
         player.shoot();
       }
     });
+  }
+  loosingEnergy() {
+    if (this.energy <= 0) {
+      location.href = "gameover.html";
+    }
+    this.energy -= 10;
+    console.log("Player has lost energy " + this.energy)
+  }
+  gainingEnergy() {
+    if (this.energy < 100) {
+      this.energy += 10;
+    }
+    console.log("Player has gained energy " + this.energy)
   }
 
   moveUp() {
@@ -122,6 +136,7 @@ class lowerObstacle extends Obstacle {
 
     this.domElement = null;
     this.oneEnemy = null;
+    this.foodItem = null;
     this.enemyPositionCounter = 0;
     this.firstDivInObst = null;
     this.secondDivInObst = null;
@@ -160,6 +175,12 @@ class lowerObstacle extends Obstacle {
     if (ememyIsOnHouse) {
       this.oneEnemy = new Enemy(this.positionX, this.height);
       boardElm.appendChild(this.oneEnemy.domElement);
+    } else {
+      const makeFoodAppear = Math.random() < 1;
+      if (makeFoodAppear) {
+        this.foodItem = new FoodItem(this.positionX, this.positionY);
+        boardElm.appendChild(this.foodItem.domElement);
+      }
     }
   }
   moveLeft() {
@@ -169,6 +190,9 @@ class lowerObstacle extends Obstacle {
     }
     if (this.oneEnemy !== null && this.oneEnemy !== undefined) {
       this.oneEnemy.updatePosition(this.positionX, this.positionY, this.height);
+    }
+    if (this.foodItem != null && this.foodItem !== undefined) {
+      this.foodItem.updatePosition(this.positionX, this.positionY, this.height);
     }
   }
 }
@@ -180,9 +204,7 @@ function randomTemple() {
     "img/temple4.png",
     "img/temple5.png",
   ];
-  console.log("array length" + templeImg.length);
   const randomImg = Math.floor(Math.random() * templeImg.length);
-  console.log("url(" + '"' + templeImg[randomImg] + '"' + ")");
   return "url(" + '"' + templeImg[randomImg] + '"' + ") no-repeat";
 }
 
@@ -194,6 +216,11 @@ player.attachEventListeners();
 setInterval(() => {
   player.moveDown();
 }, 100);
+
+/* Make the Player loose energy every 5 seconds */
+setInterval(function () {
+  player.loosingEnergy();
+}, 5000);
 
 /** Create obstacles
  * - fill two arrays with obstacles with a delay of 0.5 seconds inbetween
@@ -226,16 +253,8 @@ function detectCollision(oneObstacle) {
     player.positionY < oneObstacle.positionY + oneObstacle.height &&
     player.height + player.positionY > oneObstacle.positionY
   ) {
-    location.href = "gameover.html";
+    //location.href = "gameover.html";
   }
-  /*
-  if (oneObstacle.oneEnemy !== null && oneObstacle.oneEnemy !== undefined) {
-    if (oneObstacle.positionX < 40) {
-      //detectEnemyCollision();
-      handleEnemies(oneObstacle, oneObstacle.oneEnemy);
-    } 
-  }
-  */
 }
 /** Remove Obstacles
  *  removes Obstacles from array and from the html document
@@ -272,16 +291,16 @@ class Enemy {
     this.height = 12;
     this.positionX = positionX;
     this.positionY = positionY;
+    this.className = "enemy";
 
     this.domElement = null;
-    this.createDomElement();
-    this.closeToEnemy = null;
+    this.createDomElement(this.className);
     this.enemyPositionCounter = 0;
   }
-  createDomElement() {
+  createDomElement(className) {
     this.domElement = document.createElement("div");
 
-    this.domElement.className = "enemy";
+    this.domElement.className = className;
     this.domElement.style.width = this.width + "vw";
     this.domElement.style.height = this.height + "vh";
     this.domElement.style.bottom = this.positionY + "vh";
@@ -309,6 +328,21 @@ class Enemy {
   }
 }
 
+class FoodItem extends Enemy {
+  constructor(positionX, positionY, domElement) {
+    super(domElement);
+    this.positionX = positionX;
+    this.positionY = positionY;
+    this.width = 2.5;
+    this.height = 4.5;
+
+    this.className = "fuel";
+    this.createDomElement(this.className);
+
+    this.fuelPositionCounter = 0;
+  }
+}
+
 function detectEnemyCollision(enemy) {
   if (
     player.positionX < enemy.positionX + enemy.width &&
@@ -316,7 +350,13 @@ function detectEnemyCollision(enemy) {
     player.positionY < enemy.positionY + enemy.height &&
     player.height + player.positionY > enemy.positionY
   ) {
-    location.href = "gameover.html";
+    if (enemy instanceof FoodItem) {
+      document.getElementById("success").play();
+      enemy.domElement.remove();
+      enemy = null;
+      player.gainingEnergy();
+    }
+    //location.href = "gameover.html";
   }
 }
 
@@ -370,7 +410,7 @@ class Shooter {
           obstacle.oneEnemy.positionY + obstacle.oneEnemy.height &&
         this.height + this.positionY > obstacle.oneEnemy.positionY
       ) {
-        document.getElementById("success").play();
+        document.getElementById("shot-enemy").play();
         obstacle.oneEnemy.domElement.remove();
         obstacle.oneEnemy = null;
       }
