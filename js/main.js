@@ -12,7 +12,7 @@ class Player {
     this.width = 16;
     this.height = 6;
     this.positionX = 5;
-    this.positionY = 0;
+    this.positionY = 60;
     this.speedX = 0;
     this.speedY = 0;
     this.gravity = 0.15;
@@ -100,8 +100,8 @@ class Obstacle {
 
     if (this.domElement.positionY !== 0) {
       this.domElement.style.background =
-        'url("img/final-clouds.png") no-repeat';
-      this.domElement.style.backgroundSize = "80% 100%";
+        'url("img/final-final-clouds.png") no-repeat';
+      this.domElement.style.backgroundSize = "100% 100%";
     }
 
     const boardElm = document.getElementById("game-environment");
@@ -155,7 +155,7 @@ class lowerObstacle extends Obstacle {
     this.domElement.appendChild(this.secondDivInObst);
     this.domElement.appendChild(this.firstDivInObst);
 
-    const ememyIsOnHouse = Math.random() < 0.3;
+    const ememyIsOnHouse = Math.random() < 0.6;
 
     if (ememyIsOnHouse) {
       this.oneEnemy = new Enemy(this.positionX, this.height);
@@ -226,7 +226,6 @@ function detectCollision(oneObstacle) {
     player.positionY < oneObstacle.positionY + oneObstacle.height &&
     player.height + player.positionY > oneObstacle.positionY
   ) {
-    document.getElementById("game-is-over").play();
     location.href = "gameover.html";
   }
   /*

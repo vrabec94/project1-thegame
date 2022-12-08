@@ -2,7 +2,7 @@
  *  - on mouseclick on button user will be redirected
  *   to the game
  * */
-document.getElementById('game-is-over').onplay();
+document.getElementById('game-is-over').play();
 
 const gameOverButton = document.getElementById('play-again');
     gameOverButton.addEventListener("click", function() {
