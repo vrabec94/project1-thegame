@@ -271,7 +271,7 @@ class LowerObstacle extends Obstacle {
       this.oneEnemy = new Enemy(this.positionX, this.height);
       boardElm.appendChild(this.oneEnemy.domElement);
     } else {
-      const makeFoodAppear = Math.random() < 0.4;
+      const makeFoodAppear = Math.random() < 0.3;
       if (makeFoodAppear) {
         this.foodItem = new FoodItem(this.positionX, this.positionY);
         boardElm.appendChild(this.foodItem.domElement);
