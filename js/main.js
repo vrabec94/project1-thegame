@@ -18,7 +18,7 @@ class Game {
     this.player.attachEventListeners();
 
     setInterval(() => {
-      const bottomObstacles = new lowerObstacle(
+      const bottomObstacles = new LowerObstacle(
         0,
         Math.random() * (35 - 10) + 10
       );
@@ -29,13 +29,17 @@ class Game {
 
     setInterval(() => {
       this.bottomObstacleArr.forEach((oneObstacle) => {
-        oneObstacle.moveDetectRemove();
+        oneObstacle.moveLeft();
+        oneObstacle.detectCollision();
+        oneObstacle.removeObstacles();
       });
     }, 100);
 
     setInterval(() => {
       this.topObstacleArr.forEach((oneObstacle) => {
-        oneObstacle.moveDetectRemove();
+        oneObstacle.moveLeft();
+        oneObstacle.detectCollision();
+        oneObstacle.removeObstacles();
       });
     }, 100);
 
@@ -143,8 +147,11 @@ class Player {
  *   to differentiate between bottom and top obstacles
  *  - parameter height to give the obstacles on the bottom
  *   a random height
+ *  - creates a dom Element, the obstacles on top and bottom of the board
  *  - function moveLeft moves the obstacles from right to left
  *  and prevents obstacles from moving outside of the game area
+ *  - function detectCollision, detects collision between obstacle and player
+ *  - function removeObstacles, removes Obstacles when they are outside of the board
  */
 
 class Obstacle {
@@ -181,19 +188,7 @@ class Obstacle {
       this.domElement.style.left = this.positionX + "vw";
     }
   }
-  /** handle Obstacles
-   *  iterates through the arrays of bottom and top
-   *  arrays
-   */
-  moveDetectRemove() {
-    this.moveLeft();
-    this.detectCollision();
-    this.removeObstacles();
-  }
-  /** Detect Collision
-   *  between the player and the obstacles on the bottom and the top
-   *  redirects to a new page if collision is detected
-   */
+
   detectCollision() {
     if (
       flyAway.player.positionX < this.positionX + this.width &&
@@ -204,10 +199,7 @@ class Obstacle {
       location.href = "gameover.html";
     }
   }
-  /** Remove Obstacles
-   *  removes Obstacles from array and from the html document
-   *  if they move outside of the game area
-   */
+
   removeObstacles() {
     if (this.positionX + this.width <= 0) {
       this.domElement.remove();
@@ -219,7 +211,19 @@ class Obstacle {
     }
   }
 }
-class lowerObstacle extends Obstacle {
+
+/** class LowerObstacle
+ *  - extends Obstacle, has possibly one extra enemy or one extra foodItem
+ *  - creates three domElements, one div to put the other divs in, to use different
+ *   images on top of each other
+ *  - creates new instances of Enemy and FoodItem
+ *  - randomly places enemies on obstacles, if there are none placed it might randomly
+ *   place foodItems on obstacles
+ *  - function moveLeft, moves the LowerObstacle to the left and invokes updatePosition()
+ *   to keep track of x and y positions of their Enemies/foodItems
+ *  - randomTemple() generates a random image for the bottom Obstacle
+ */
+class LowerObstacle extends Obstacle {
   constructor(positionY, height, width, positionX) {
     super(width, positionX);
     this.positionY = positionY;
@@ -228,7 +232,7 @@ class lowerObstacle extends Obstacle {
     this.domElement = null;
     this.oneEnemy = null;
     this.foodItem = null;
-    this.enemyPositionCounter = 0;
+    //this.enemyPositionCounter = 0;
     this.firstDivInObst = null;
     this.secondDivInObst = null;
     this.createLowerDomElement();
