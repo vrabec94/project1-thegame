@@ -58,11 +58,11 @@ class Game {
  *  - Player gets pulled down by gravity 0.15
  *  - Gravity increases, the closer the player gets to the bottom of board
  *  - attachEventListener to detect user pressing on arrow up and space bar
- *  - function movingUp, changes players x position
- *  - function movingDown, implements gravity on player, changes players y position
- *  - function loosing energy, player looses energy by -10 every 5s
- *  - function gaining energy, player gains energy by +10 when eating sushi
- *  - function shoot, creates a new Object Shooter
+ *  - method movingUp, changes players y position
+ *  - method movingDown, implements gravity on player, changes players y position
+ *  - method loosing energy, player looses energy by -10 every 5s
+ *  - method gaining energy, player gains energy by +10 when eating sushi
+ *  - method shoot, creates a new instance of Shooter
  */
 
 class Player {
@@ -148,10 +148,10 @@ class Player {
  *  - parameter height to give the obstacles on the bottom
  *   a random height
  *  - creates a dom Element, the obstacles on top and bottom of the board
- *  - function moveLeft moves the obstacles from right to left
+ *  - method moveLeft moves the obstacles from right to left
  *  and prevents obstacles from moving outside of the game area
- *  - function detectCollision, detects collision between obstacle and player
- *  - function removeObstacles, removes Obstacles when they are outside of the board
+ *  - method detectCollision, detects collision between obstacle and player
+ *  - method removeObstacles, removes Obstacles when they are outside of the board
  */
 
 class Obstacle {
@@ -214,12 +214,12 @@ class Obstacle {
 
 /** class LowerObstacle
  *  - extends Obstacle, has possibly one extra enemy or one extra foodItem
- *  - creates three domElements, one div to put the other divs in, to use different
+ *  - creates three domElements, one div to put the other two divs in, to use different
  *   images on top of each other
  *  - creates new instances of Enemy and FoodItem
  *  - randomly places enemies on obstacles, if there are none placed it might randomly
  *   place foodItems on obstacles
- *  - function moveLeft, moves the LowerObstacle to the left and invokes updatePosition()
+ *  - method moveLeft, moves the LowerObstacle to the left and invokes updatePosition()
  *   to keep track of x and y positions of their Enemies/foodItems
  *  - randomTemple() generates a random image for the bottom Obstacle
  */
@@ -302,7 +302,15 @@ class LowerObstacle extends Obstacle {
     return "url(" + '"' + templeImg[randomImg] + '"' + ") no-repeat";
   }
 }
-
+/** class Enemy
+ *  - creates domElement with the same position x and y as of the lower obstacles, to place
+ *  them on top of the obstacles
+ *  - method updatePosition() changes the Enemies/FoodItem positions, removes them form the 
+ *  board when their position is and invokes detectCollision
+ *  - method detectCollision checks for a collision between Player and Enemy/FoodItem, for a
+ *  collision with FoodItem, player will gain energy, FoodItem will be removed from board, 
+ *  for a collision with Enemy, game will be over
+ */
 class Enemy {
   constructor(positionX, positionY) {
     this.width = 3;
@@ -324,7 +332,10 @@ class Enemy {
     this.domElement.style.bottom = this.positionY + "vh";
     this.domElement.style.left = this.positionX + "vw";
   }
-
+ /* to determine the position Y of the enemies/fooditems, their initial position is 
+    added to the height of the whole obstacle, minus ten to place them a little lower 
+    and plus enemyPositionCounter, which starts increasing when position x is smaller 
+    than 40, so when the enemy gets close to the player */
   updatePosition(posX, posY, height) {
     if (this.positionX < 0) {
       this.domElement.remove();
@@ -363,6 +374,9 @@ class Enemy {
     }
   }
 }
+/** class FoodItem
+ * - extends Enemy, has different dimensions and different className for its dom Element
+ */
 
 class FoodItem extends Enemy {
   constructor(positionX, positionY, domElement) {
@@ -378,7 +392,16 @@ class FoodItem extends Enemy {
     this.fuelPositionCounter = 0;
   }
 }
-
+/** class Shooter
+ * - creates domElement with the same position x and y as the player, so the div elements 
+ *  will be "shoot" from player's head
+ * - method movingDown() consistently moves the player down and to the right, invokes 
+ *  detectCollision() when inside of the game board, otherwise removes Shooter from board
+ * - method detectShooterCollision() iterates through all the Lower Obstacles on the board, 
+ *  checks for FoodItems and Enemies and if there are any, checks for a collision between 
+ *  the player and them
+ * - if collision is detected domElements will be removed and the instances nullified
+ */
 class Shooter {
   constructor() {
     this.positionX = flyAway.player.positionX + flyAway.player.width;
