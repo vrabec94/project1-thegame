@@ -4,7 +4,7 @@
  * */
 document.getElementById('game-is-over').play();
 
-const gameOverButton = document.getElementById('play-again');
-    gameOverButton.addEventListener("click", function() {
+const restartGameButton = document.getElementById('play-again');
+    restartGameButton.addEventListener("click", function() {
         location.href = 'letsplay.html';
     });

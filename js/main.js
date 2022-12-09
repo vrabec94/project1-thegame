@@ -1,10 +1,68 @@
+/** Class Game
+ *  - creates one player, one array of top obstacles, one array of bottom obstacles
+ *  - fills the both arrays in 1s intervals consistently with their obstacles
+ *  the lower obstacles are created with random heights
+ *  - every item of both arrays will be moved to the left, checked for collision
+ *  with the player and possibly removed from board in 0.1s intervals
+ *  - player is consistently moved down in 0.1s intervals
+ *  - player is consistently loosing energy (starting at 100)
+ */
+class Game {
+  constructor() {
+    this.bottomObstacleArr = [];
+    this.topObstacleArr = [];
+    this.player = null;
+  }
+  start() {
+    this.player = new Player();
+    this.player.attachEventListeners();
+
+    setInterval(() => {
+      const bottomObstacles = new LowerObstacle(
+        0,
+        Math.random() * (35 - 10) + 10
+      );
+      const topObstacles = new Obstacle(70, 10);
+      this.bottomObstacleArr.push(bottomObstacles);
+      this.topObstacleArr.push(topObstacles);
+    }, 1000);
+
+    setInterval(() => {
+      this.bottomObstacleArr.forEach((oneObstacle) => {
+        oneObstacle.moveLeft();
+        oneObstacle.detectCollision();
+        oneObstacle.removeObstacles();
+      });
+    }, 100);
+
+    setInterval(() => {
+      this.topObstacleArr.forEach((oneObstacle) => {
+        oneObstacle.moveLeft();
+        oneObstacle.detectCollision();
+        oneObstacle.removeObstacles();
+      });
+    }, 100);
+
+    setInterval(() => {
+      this.player.movingDown();
+    }, 100);
+
+    setInterval(() => {
+      this.player.loosingEnergy();
+    }, 5000);
+  }
+}
+
 /**  Class Player
  *  - Creates a dom Element, the player on the left side of the box
- *  - Player gets pulled down by gravity 0.1
- *  - Gravity increases with time, the closer the player gets to the bottom
- *  - attachEventListener to detect mouseclick on arrow up
- *  - function moveUp, triggered by mouseclick on arrow up, changes its position
- *  - function moveDown, implements gravity to player, changes its position
+ *  - Player gets pulled down by gravity 0.15
+ *  - Gravity increases, the closer the player gets to the bottom of board
+ *  - attachEventListener to detect user pressing on arrow up and space bar
+ *  - method movingUp, changes players y position
+ *  - method movingDown, implements gravity on player, changes players y position
+ *  - method loosing energy, player looses energy by -10 every 5s
+ *  - method gaining energy, player gains energy by +10 when eating sushi
+ *  - method shoot, creates a new instance of Shooter
  */
 
 class Player {
@@ -39,13 +97,13 @@ class Player {
     document.addEventListener("keydown", (event) => {
       if (event.key === "ArrowUp") {
         document.getElementById("wings").play();
-        player.moveUp();
+        this.movingUp();
       }
     });
     document.addEventListener("keydown", (event2) => {
       if (event2.key === " ") {
         document.getElementById("shooter-boh").play();
-        player.shoot();
+        this.shoot();
       }
     });
   }
@@ -63,14 +121,14 @@ class Player {
     document.getElementById("fuel-bar").value = this.energy;
   }
 
-  moveUp() {
+  movingUp() {
     this.gravitySpeed = 0;
     if (this.positionY < 100) {
       this.positionY += 5;
       this.domElement.style.bottom = this.positionY + "vh";
     }
   }
-  moveDown() {
+  movingDown() {
     if (this.positionY > 0) {
       this.gravitySpeed += this.gravity;
       this.positionX -= this.speedX;
@@ -80,7 +138,7 @@ class Player {
   }
   shoot() {
     const shooting = new Shooter();
-    shooting.moveDown();
+    shooting.movingDown();
   }
 }
 
@@ -89,8 +147,11 @@ class Player {
  *   to differentiate between bottom and top obstacles
  *  - parameter height to give the obstacles on the bottom
  *   a random height
- *  - function moveLeft moves the obstacles from right to left
+ *  - creates a dom Element, the obstacles on top and bottom of the board
+ *  - method moveLeft moves the obstacles from right to left
  *  and prevents obstacles from moving outside of the game area
+ *  - method detectCollision, detects collision between obstacle and player
+ *  - method removeObstacles, removes Obstacles when they are outside of the board
  */
 
 class Obstacle {
@@ -127,8 +188,42 @@ class Obstacle {
       this.domElement.style.left = this.positionX + "vw";
     }
   }
+
+  detectCollision() {
+    if (
+      flyAway.player.positionX < this.positionX + this.width &&
+      flyAway.player.positionX + flyAway.player.width > this.positionX &&
+      flyAway.player.positionY < this.positionY + this.height &&
+      flyAway.player.height + flyAway.player.positionY > this.positionY
+    ) {
+      location.href = "gameover.html";
+    }
+  }
+
+  removeObstacles() {
+    if (this.positionX + this.width <= 0) {
+      this.domElement.remove();
+      if (this.positionY === 0) {
+        flyAway.bottomObstacleArr.shift();
+      } else if (this.positionY === 90) {
+        flyAway.topObstacleArr.shift();
+      }
+    }
+  }
 }
-class lowerObstacle extends Obstacle {
+
+/** class LowerObstacle
+ *  - extends Obstacle, has possibly one extra enemy or one extra foodItem
+ *  - creates three domElements, one div to put the other two divs in, to use different
+ *   images on top of each other
+ *  - creates new instances of Enemy and FoodItem
+ *  - randomly places enemies on obstacles, if there are none placed it might randomly
+ *   place foodItems on obstacles
+ *  - method moveLeft, moves the LowerObstacle to the left and invokes updatePosition()
+ *   to keep track of x and y positions of their Enemies/foodItems
+ *  - randomTemple() generates a random image for the bottom Obstacle
+ */
+class LowerObstacle extends Obstacle {
   constructor(positionY, height, width, positionX) {
     super(width, positionX);
     this.positionY = positionY;
@@ -137,7 +232,7 @@ class lowerObstacle extends Obstacle {
     this.domElement = null;
     this.oneEnemy = null;
     this.foodItem = null;
-    this.enemyPositionCounter = 0;
+    //this.enemyPositionCounter = 0;
     this.firstDivInObst = null;
     this.secondDivInObst = null;
     this.createLowerDomElement();
@@ -157,7 +252,7 @@ class lowerObstacle extends Obstacle {
     this.secondDivInObst.className = "house-obstacle";
     this.secondDivInObst.style.height = "10vh";
 
-    this.secondDivInObst.style.background = randomTemple();
+    this.secondDivInObst.style.background = this.randomTemple();
     this.secondDivInObst.style.backgroundSize = "100% 100%";
     this.firstDivInObst.className = "landscape-obstacle";
     this.firstDivInObst.style.top = "10vh";
@@ -176,7 +271,7 @@ class lowerObstacle extends Obstacle {
       this.oneEnemy = new Enemy(this.positionX, this.height);
       boardElm.appendChild(this.oneEnemy.domElement);
     } else {
-      const makeFoodAppear = Math.random() < 0.7;
+      const makeFoodAppear = Math.random() < 0.3;
       if (makeFoodAppear) {
         this.foodItem = new FoodItem(this.positionX, this.positionY);
         boardElm.appendChild(this.foodItem.domElement);
@@ -195,96 +290,27 @@ class lowerObstacle extends Obstacle {
       this.foodItem.updatePosition(this.positionX, this.positionY, this.height);
     }
   }
-}
-function randomTemple() {
-  const templeImg = [
-    "img/temple1.png",
-    "img/temple2.png",
-    "img/temple3.png",
-    "img/temple4.png",
-    "img/temple5.png",
-  ];
-  const randomImg = Math.floor(Math.random() * templeImg.length);
-  return "url(" + '"' + templeImg[randomImg] + '"' + ") no-repeat";
-}
-
-/* Initialising player, starting game */
-const player = new Player();
-player.attachEventListeners();
-
-/* Make the Player fall down consistently */
-setInterval(() => {
-  player.moveDown();
-}, 100);
-
-/* Make the Player loose energy every 5 seconds */
-setInterval(function () {
-  player.loosingEnergy();
-}, 5000);
-
-/** Create obstacles
- * - fill two arrays with obstacles with a delay of 0.5 seconds inbetween
- *   to create obstacles consistently on top and bottom
- * - bottom obstacles are created with a random height between 10 and 60
- */
-
-const bottomObstacleArr = [];
-const topObstacleArr = [];
-
-setInterval(() => {
-  const bottomObstacles = new lowerObstacle(0, Math.random() * (35 - 10) + 10);
-  const topObstacles = new Obstacle(70, 10);
-  bottomObstacleArr.push(bottomObstacles);
-  topObstacleArr.push(topObstacles);
-}, 1000);
-
-setInterval(handleObstacles, 100, bottomObstacleArr);
-setInterval(handleObstacles, 100, topObstacleArr);
-
-/** Detect Collision
- *  between the player and the obstacles on the bottom and the top
- *  redirects to a new page if collision is detected
- */
-
-function detectCollision(oneObstacle) {
-  if (
-    player.positionX < oneObstacle.positionX + oneObstacle.width &&
-    player.positionX + player.width > oneObstacle.positionX &&
-    player.positionY < oneObstacle.positionY + oneObstacle.height &&
-    player.height + player.positionY > oneObstacle.positionY
-  ) {
-    location.href = "gameover.html";
+  randomTemple() {
+    const templeImg = [
+      "img/temple1.png",
+      "img/temple2.png",
+      "img/temple3.png",
+      "img/temple4.png",
+      "img/temple5.png",
+    ];
+    const randomImg = Math.floor(Math.random() * templeImg.length);
+    return "url(" + '"' + templeImg[randomImg] + '"' + ") no-repeat";
   }
 }
-/** Remove Obstacles
- *  removes Obstacles from array and from the html document
- *  if they move outside of the game area
+/** class Enemy
+ *  - creates domElement with the same position x and y as of the lower obstacles, to place
+ *  them on top of the obstacles
+ *  - method updatePosition() changes the Enemies/FoodItem positions, removes them form the 
+ *  board when their position is and invokes detectCollision
+ *  - method detectCollision checks for a collision between Player and Enemy/FoodItem, for a
+ *  collision with FoodItem, player will gain energy, FoodItem will be removed from board, 
+ *  for a collision with Enemy, game will be over
  */
-function removeObstacles(oneObstacle) {
-  if (oneObstacle.positionX + oneObstacle.width <= 0) {
-    oneObstacle.domElement.remove();
-    if (oneObstacle.positionY === 0) {
-      bottomObstacleArr.shift();
-      //console.log("removed.. array length is now" + bottomObstacleArr.length);
-    } else if (oneObstacle.positionY === 90) {
-      topObstacleArr.shift();
-    }
-  }
-}
-/** handle Obstacles
- *  iterates through the arrays of bottom and top
- *  arrays
- */
-function handleObstacles(obstacles) {
-  obstacles.forEach((oneObstacle) => {
-    oneObstacle.moveLeft();
-
-    detectCollision(oneObstacle);
-
-    removeObstacles(oneObstacle);
-  });
-}
-
 class Enemy {
   constructor(positionX, positionY) {
     this.width = 3;
@@ -306,7 +332,10 @@ class Enemy {
     this.domElement.style.bottom = this.positionY + "vh";
     this.domElement.style.left = this.positionX + "vw";
   }
-
+ /* to determine the position Y of the enemies/fooditems, their initial position is 
+    added to the height of the whole obstacle, minus ten to place them a little lower 
+    and plus enemyPositionCounter, which starts increasing when position x is smaller 
+    than 40, so when the enemy gets close to the player */
   updatePosition(posX, posY, height) {
     if (this.positionX < 0) {
       this.domElement.remove();
@@ -317,16 +346,37 @@ class Enemy {
       this.domElement.style.bottom = this.positionY + "vh";
       this.domElement.style.left = this.positionX + "vw";
       this.enemyPositionCounter++;
-      detectEnemyCollision(this);
+      this.detectEnemyCollision();
     } else {
       this.positionX = posX;
       this.positionY = posY + height - 10;
       this.domElement.style.bottom = this.positionY + "vh";
       this.domElement.style.left = this.positionX + "vw";
-      detectEnemyCollision(this);
+      this.detectEnemyCollision();
+    }
+  }
+  detectEnemyCollision() {
+    if (
+      flyAway.player.positionX < this.positionX + this.width &&
+      flyAway.player.positionX + flyAway.player.width > this.positionX &&
+      flyAway.player.positionY < this.positionY + this.height &&
+      flyAway.player.height + flyAway.player.positionY > this.positionY
+    ) {
+      if (this instanceof FoodItem) {
+        document.getElementById("success").play();
+        this.domElement.remove();
+        this.positionX = 0;
+        this.positionY = 0;
+        flyAway.player.gainingEnergy();
+      } else {
+        location.href = "gameover.html";
+      }
     }
   }
 }
+/** class FoodItem
+ * - extends Enemy, has different dimensions and different className for its dom Element
+ */
 
 class FoodItem extends Enemy {
   constructor(positionX, positionY, domElement) {
@@ -342,29 +392,20 @@ class FoodItem extends Enemy {
     this.fuelPositionCounter = 0;
   }
 }
-
-function detectEnemyCollision(enemy) {
-  if (
-    player.positionX < enemy.positionX + enemy.width &&
-    player.positionX + player.width > enemy.positionX &&
-    player.positionY < enemy.positionY + enemy.height &&
-    player.height + player.positionY > enemy.positionY
-  ) {
-    if (enemy instanceof FoodItem) {
-      document.getElementById("success").play();
-      enemy.domElement.remove();
-      enemy = null;
-      player.gainingEnergy();
-    } else {
-      location.href = "gameover.html";
-    }
-  }
-}
-
+/** class Shooter
+ * - creates domElement with the same position x and y as the player, so the div elements 
+ *  will be "shoot" from player's head
+ * - method movingDown() consistently moves the player down and to the right, invokes 
+ *  detectCollision() when inside of the game board, otherwise removes Shooter from board
+ * - method detectShooterCollision() iterates through all the Lower Obstacles on the board, 
+ *  checks for FoodItems and Enemies and if there are any, checks for a collision between 
+ *  the player and them
+ * - if collision is detected domElements will be removed and the instances nullified
+ */
 class Shooter {
   constructor() {
-    this.positionX = player.positionX + player.width;
-    this.positionY = player.positionY + player.height;
+    this.positionX = flyAway.player.positionX + flyAway.player.width;
+    this.positionY = flyAway.player.positionY + flyAway.player.height;
     this.width = 3;
     this.height = 10;
 
@@ -383,7 +424,7 @@ class Shooter {
     const boardElement = document.getElementById("game-environment");
     boardElement.appendChild(this.shooter);
   }
-  moveDown() {
+  movingDown() {
     setInterval(() => {
       this.positionY--;
       this.shooter.style.bottom = this.positionY + "vh";
@@ -399,10 +440,10 @@ class Shooter {
   }
 
   detectShooterCollision() {
-    const allEnemies = bottomObstacleArr.filter((obstacle) => {
+    const allEnemies = flyAway.bottomObstacleArr.filter((obstacle) => {
       return obstacle.oneEnemy !== null && obstacle.oneEnemy !== undefined;
     });
-    const allFoodItems = bottomObstacleArr.filter((obstacle) => {
+    const allFoodItems = flyAway.bottomObstacleArr.filter((obstacle) => {
       return obstacle.foodItem !== null && obstacle.foodItem !== undefined;
     });
     allEnemies.forEach((obstacle) => {
@@ -434,3 +475,6 @@ class Shooter {
     });
   }
 }
+
+const flyAway = new Game();
+flyAway.start();
